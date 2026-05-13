@@ -1,0 +1,34 @@
+Run the pipeline from the surya environment:
+
+```powershell
+(& conda shell.powershell hook) | Out-String | Invoke-Expression
+conda activate C:\Users\Hiwa\.conda\envs\surya
+python -c "import sys; print(sys.executable); print(sys.version)"
+python -m pipeline --config config.yaml.example doctor
+```
+
+Use `surya` for the pipeline. Do not run the pipeline from the `calamari-ocr` environment unless you also install the core requirements there:
+
+```powershell
+python -m pip install -r requirements.txt
+```
+
+Better Calamari setup:
+
+1. Keep the main pipeline in `surya`.
+2. Keep Calamari installed in `C:\Users\Hiwa\.conda\envs\calamari-ocr`.
+3. Put the Calamari checkpoint at `models\calamari\calamari_arabic_v1.ckpt`.
+4. Enable Calamari in `config.yaml` and point `executable` to:
+
+```yaml
+engines:
+  calamari:
+    enabled: true
+    model: models/calamari/calamari_arabic_v1.ckpt
+    executable: C:\Users\Hiwa\.conda\envs\calamari-ocr\Scripts\calamari-predict.exe
+```
+
+Kraken model rule:
+
+- `model:` empty means Kraken line detection only.
+- Set `model: models\kraken\kraken_arabic_historical_v1.mlmodel` only after the real `.mlmodel` file exists.

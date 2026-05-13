@@ -1,0 +1,10 @@
+# Optional in-process legacy OCR engine.
+#
+# Use this file in a Python 3.10 or 3.11 environment. Kraken 5.x/6.x does not
+# publish compatible wheels for Python 3.13, and pip will reject those pins in a
+# 3.13 venv.
+#
+# Calamari is intentionally not installed here because calamari-ocr 2.3.0 and
+# kraken 5.3.0 require incompatible python-bidi versions. Install Calamari in a
+# separate environment and point engines.calamari.executable at calamari-predict.
+kraken==5.3.0

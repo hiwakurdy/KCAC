@@ -1,0 +1,20 @@
+surya-ocr
+transformers>=4.56.1,<5
+torch>=2.0
+torchvision
+Pillow>=10.0
+opencv-python>=4.8
+numpy>=1.24
+matplotlib>=3.7
+tqdm
+shapely
+pandas
+
+# Optional fallback engines for plan_b.py:
+# paddlepaddle
+# paddleocr
+# python-doctr[torch]
+# easyocr
+
+# Optional manual correction UI:
+# label-studio

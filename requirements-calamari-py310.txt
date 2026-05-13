@@ -1,0 +1,5 @@
+# Optional external Calamari CLI environment.
+#
+# Install this in a separate Python 3.10/3.11 environment, not in the same env
+# as Kraken 5.3.0, because their python-bidi requirements conflict.
+calamari-ocr==2.3.0

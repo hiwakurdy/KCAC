@@ -1,0 +1,2103 @@
+{
+  "schema_name": "kcac_document_understanding_annotation",
+  "schema_version": "0.1",
+  "standards_alignment": [
+    "PAGE XML",
+    "ALTO XML",
+    "METS/MODS",
+    "TEI P5",
+    "IIIF Presentation 3.0",
+    "HuggingFace datasets",
+    "BCP 47",
+    "SPDX",
+    "Datasheet for Datasets"
+  ],
+  "file": "page_0004.jpg",
+  "width": 1803,
+  "height": 2523,
+  "bbox_format": "coco_xywh",
+  "stable_ids": {
+    "book_id": "kcac_000409",
+    "page_id": "kcac_000409_p0004"
+  },
+  "book": {
+    "title_original": "ڕۆژنامەی ئاکرێ",
+    "title_normalised": "ڕۆژنامەی ئاکرێ",
+    "authors": "شاکر فتاح",
+    "authors_normalised": "",
+    "editor": "",
+    "compiler": "",
+    "translator": "",
+    "publisher": "",
+    "place_of_publication": "",
+    "publication_year_printed": "",
+    "publication_year_gregorian": "",
+    "publication_year_hijri": "",
+    "publication_year_kurdish": "",
+    "genre": "",
+    "tags": "",
+    "rights_status": "public_domain",
+    "spdx_license": "CC-BY-4.0",
+    "source_collection": "چاپخانەی الحوادث",
+    "source_url": "https://archive.kcac.org/zoom/409/view?page=1&p=separate&tool=info&view=0,0,1733,2480",
+    "physical_condition": "",
+    "missing_pages": "",
+    "notes": ""
+  },
+  "page": {
+    "book_id": "kcac_000409",
+    "page_number_sequence": 4,
+    "page_number_printed": "4",
+    "page_type": "body",
+    "layout_class": "single-column",
+    "reading_direction": "rtl",
+    "language": "ckb-Arab",
+    "script": "sorani-arabic",
+    "era_typography": "letterpress",
+    "scan_resolution_dpi": "",
+    "colour_mode": "colour",
+    "scan_quality": "good",
+    "damage_present": "",
+    "verification_status": "raw",
+    "split": "train",
+    "has_illustrations": false,
+    "has_table": false,
+    "has_marginalia": false,
+    "has_footnote": false,
+    "has_poetry": false,
+    "page_id": "kcac_000409_p0004",
+    "pixel_dimensions": {
+      "width": 1803,
+      "height": 2523
+    },
+    "image_filename": "page_0004.jpg"
+  },
+  "annotations": {
+    "regions": [
+      {
+        "id": "kcac_000409_p0004_r0001",
+        "region_id": "kcac_000409_p0004_r0001",
+        "class": "TextRegion",
+        "bbox": [
+          121.3,
+          325.13,
+          1290.27,
+          1754.3
+        ],
+        "polygon": [
+          [
+            135.16,
+            315.11
+          ],
+          [
+            1425.26,
+            335.37
+          ],
+          [
+            1397.71,
+            2089.46
+          ],
+          [
+            107.6,
+            2069.19
+          ]
+        ],
+        "angle_degrees": 0.9,
+        "confidence": 1,
+        "reading_order": 1,
+        "verification_status": "raw"
+      },
+      {
+        "id": "kcac_000409_p0004_r0002",
+        "region_id": "kcac_000409_p0004_r0002",
+        "class": "PageNumber",
+        "bbox": [
+          673.5,
+          2194.1,
+          153.2,
+          46.8
+        ],
+        "polygon": [
+          [
+            673.5,
+            2194.1
+          ],
+          [
+            826.7,
+            2194.1
+          ],
+          [
+            826.7,
+            2240.9
+          ],
+          [
+            673.5,
+            2240.9
+          ]
+        ],
+        "angle_degrees": 0,
+        "confidence": 1,
+        "reading_order": 2,
+        "verification_status": "raw"
+      }
+    ],
+    "lines": [
+      {
+        "id": "kcac_000409_p0004_l0001",
+        "line_id": "kcac_000409_p0004_l0001",
+        "bbox": [
+          147,
+          331.75,
+          1262.2,
+          76.62
+        ],
+        "polygon": [
+          [
+            147.68,
+            321.85
+          ],
+          [
+            1409.72,
+            341.67
+          ],
+          [
+            1408.52,
+            418.28
+          ],
+          [
+            146.48,
+            398.45
+          ]
+        ],
+        "baseline": [
+          [
+            146.74,
+            381.6
+          ],
+          [
+            1408.79,
+            401.42
+          ]
+        ],
+        "angle_degrees": 0.9,
+        "confidence": 1,
+        "reading_order": 1,
+        "transcription": {
+          "raw": "",
+          "normalised": "",
+          "diacritic_stripped": ""
+        },
+        "verification_status": "raw"
+      },
+      {
+        "id": "kcac_000409_p0004_l0002",
+        "line_id": "kcac_000409_p0004_l0002",
+        "bbox": [
+          135,
+          409,
+          1275,
+          80.62
+        ],
+        "polygon": [
+          [
+            135.71,
+            398.99
+          ],
+          [
+            1410.55,
+            419.02
+          ],
+          [
+            1409.29,
+            499.63
+          ],
+          [
+            134.45,
+            479.6
+          ]
+        ],
+        "baseline": [
+          [
+            134.72,
+            461.87
+          ],
+          [
+            1409.57,
+            481.89
+          ]
+        ],
+        "angle_degrees": 0.9,
+        "confidence": 1,
+        "reading_order": 2,
+        "transcription": {
+          "raw": "",
+          "normalised": "",
+          "diacritic_stripped": ""
+        },
+        "verification_status": "raw"
+      },
+      {
+        "id": "kcac_000409_p0004_l0003",
+        "line_id": "kcac_000409_p0004_l0003",
+        "bbox": [
+          136.39,
+          505.78,
+          1274.01,
+          62.78
+        ],
+        "polygon": [
+          [
+            136.96,
+            495.78
+          ],
+          [
+            1410.81,
+            515.79
+          ],
+          [
+            1409.82,
+            578.56
+          ],
+          [
+            135.97,
+            558.55
+          ]
+        ],
+        "baseline": [
+          [
+            136.19,
+            544.74
+          ],
+          [
+            1410.04,
+            564.75
+          ]
+        ],
+        "angle_degrees": 0.9,
+        "confidence": 1,
+        "reading_order": 3,
+        "transcription": {
+          "raw": "",
+          "normalised": "",
+          "diacritic_stripped": ""
+        },
+        "verification_status": "raw"
+      },
+      {
+        "id": "kcac_000409_p0004_l0004",
+        "line_id": "kcac_000409_p0004_l0004",
+        "bbox": [
+          144.47,
+          575.2,
+          1268.19,
+          82.9
+        ],
+        "polygon": [
+          [
+            145.2,
+            565.25
+          ],
+          [
+            1413.23,
+            585.17
+          ],
+          [
+            1411.93,
+            668.05
+          ],
+          [
+            143.9,
+            648.13
+          ]
+        ],
+        "baseline": [
+          [
+            144.18,
+            629.9
+          ],
+          [
+            1412.22,
+            649.82
+          ]
+        ],
+        "angle_degrees": 0.9,
+        "confidence": 1,
+        "reading_order": 4,
+        "transcription": {
+          "raw": "",
+          "normalised": "",
+          "diacritic_stripped": ""
+        },
+        "verification_status": "raw"
+      },
+      {
+        "id": "kcac_000409_p0004_l0005",
+        "line_id": "kcac_000409_p0004_l0005",
+        "bbox": [
+          147,
+          658,
+          1261,
+          82
+        ],
+        "polygon": [
+          [
+            147.72,
+            648.1
+          ],
+          [
+            1408.57,
+            667.91
+          ],
+          [
+            1407.28,
+            749.9
+          ],
+          [
+            146.43,
+            730.09
+          ]
+        ],
+        "baseline": [
+          [
+            146.72,
+            712.05
+          ],
+          [
+            1407.56,
+            731.86
+          ]
+        ],
+        "angle_degrees": 0.9,
+        "confidence": 1,
+        "reading_order": 5,
+        "transcription": {
+          "raw": "",
+          "normalised": "",
+          "diacritic_stripped": ""
+        },
+        "verification_status": "raw"
+      },
+      {
+        "id": "kcac_000409_p0004_l0006",
+        "line_id": "kcac_000409_p0004_l0006",
+        "bbox": [
+          147,
+          739,
+          1259,
+          78
+        ],
+        "polygon": [
+          [
+            147.69,
+            729.12
+          ],
+          [
+            1406.53,
+            748.89
+          ],
+          [
+            1405.31,
+            826.88
+          ],
+          [
+            146.47,
+            807.11
+          ]
+        ],
+        "baseline": [
+          [
+            146.73,
+            789.95
+          ],
+          [
+            1405.58,
+            809.73
+          ]
+        ],
+        "angle_degrees": 0.9,
+        "confidence": 1,
+        "reading_order": 6,
+        "transcription": {
+          "raw": "",
+          "normalised": "",
+          "diacritic_stripped": ""
+        },
+        "verification_status": "raw"
+      },
+      {
+        "id": "kcac_000409_p0004_l0007",
+        "line_id": "kcac_000409_p0004_l0007",
+        "bbox": [
+          150,
+          824,
+          1252,
+          82
+        ],
+        "polygon": [
+          [
+            150.72,
+            814.17
+          ],
+          [
+            1402.57,
+            833.84
+          ],
+          [
+            1401.28,
+            915.83
+          ],
+          [
+            149.43,
+            896.16
+          ]
+        ],
+        "baseline": [
+          [
+            149.72,
+            878.12
+          ],
+          [
+            1401.56,
+            897.79
+          ]
+        ],
+        "angle_degrees": 0.9,
+        "confidence": 1,
+        "reading_order": 7,
+        "transcription": {
+          "raw": "",
+          "normalised": "",
+          "diacritic_stripped": ""
+        },
+        "verification_status": "raw"
+      },
+      {
+        "id": "kcac_000409_p0004_l0008",
+        "line_id": "kcac_000409_p0004_l0008",
+        "bbox": [
+          145,
+          899,
+          1262.92,
+          81
+        ],
+        "polygon": [
+          [
+            145.71,
+            889.09
+          ],
+          [
+            1408.48,
+            908.92
+          ],
+          [
+            1407.21,
+            989.91
+          ],
+          [
+            144.44,
+            970.08
+          ]
+        ],
+        "baseline": [
+          [
+            144.72,
+            952.26
+          ],
+          [
+            1407.49,
+            972.1
+          ]
+        ],
+        "angle_degrees": 0.9,
+        "confidence": 1,
+        "reading_order": 8,
+        "transcription": {
+          "raw": "",
+          "normalised": "",
+          "diacritic_stripped": ""
+        },
+        "verification_status": "raw"
+      },
+      {
+        "id": "kcac_000409_p0004_l0009",
+        "line_id": "kcac_000409_p0004_l0009",
+        "bbox": [
+          140,
+          989,
+          1261,
+          73
+        ],
+        "polygon": [
+          [
+            140.65,
+            979.1
+          ],
+          [
+            1401.5,
+            998.91
+          ],
+          [
+            1400.35,
+            1071.9
+          ],
+          [
+            139.5,
+            1052.09
+          ]
+        ],
+        "baseline": [
+          [
+            139.76,
+            1036.03
+          ],
+          [
+            1400.6,
+            1055.84
+          ]
+        ],
+        "angle_degrees": 0.9,
+        "confidence": 1,
+        "reading_order": 9,
+        "transcription": {
+          "raw": "",
+          "normalised": "",
+          "diacritic_stripped": ""
+        },
+        "verification_status": "raw"
+      },
+      {
+        "id": "kcac_000409_p0004_l0010",
+        "line_id": "kcac_000409_p0004_l0010",
+        "bbox": [
+          148.99,
+          1069,
+          1256.01,
+          82
+        ],
+        "polygon": [
+          [
+            149.71,
+            1059.14
+          ],
+          [
+            1405.57,
+            1078.87
+          ],
+          [
+            1404.28,
+            1160.86
+          ],
+          [
+            148.42,
+            1141.13
+          ]
+        ],
+        "baseline": [
+          [
+            148.71,
+            1123.09
+          ],
+          [
+            1404.56,
+            1142.82
+          ]
+        ],
+        "angle_degrees": 0.9,
+        "confidence": 1,
+        "reading_order": 10,
+        "transcription": {
+          "raw": "",
+          "normalised": "",
+          "diacritic_stripped": ""
+        },
+        "verification_status": "raw"
+      },
+      {
+        "id": "kcac_000409_p0004_l0011",
+        "line_id": "kcac_000409_p0004_l0011",
+        "bbox": [
+          153,
+          1153,
+          1250,
+          74
+        ],
+        "polygon": [
+          [
+            153.66,
+            1143.19
+          ],
+          [
+            1403.5,
+            1162.82
+          ],
+          [
+            1402.34,
+            1236.81
+          ],
+          [
+            152.5,
+            1217.18
+          ]
+        ],
+        "baseline": [
+          [
+            152.75,
+            1200.9
+          ],
+          [
+            1402.6,
+            1220.53
+          ]
+        ],
+        "angle_degrees": 0.9,
+        "confidence": 1,
+        "reading_order": 11,
+        "transcription": {
+          "raw": "",
+          "normalised": "",
+          "diacritic_stripped": ""
+        },
+        "verification_status": "raw"
+      },
+      {
+        "id": "kcac_000409_p0004_l0012",
+        "line_id": "kcac_000409_p0004_l0012",
+        "bbox": [
+          137,
+          1239,
+          1262,
+          73
+        ],
+        "polygon": [
+          [
+            137.65,
+            1229.09
+          ],
+          [
+            1399.5,
+            1248.92
+          ],
+          [
+            1398.35,
+            1321.91
+          ],
+          [
+            136.5,
+            1302.08
+          ]
+        ],
+        "baseline": [
+          [
+            136.76,
+            1286.03
+          ],
+          [
+            1398.6,
+            1305.85
+          ]
+        ],
+        "angle_degrees": 0.9,
+        "confidence": 1,
+        "reading_order": 12,
+        "transcription": {
+          "raw": "",
+          "normalised": "",
+          "diacritic_stripped": ""
+        },
+        "verification_status": "raw"
+      },
+      {
+        "id": "kcac_000409_p0004_l0013",
+        "line_id": "kcac_000409_p0004_l0013",
+        "bbox": [
+          144,
+          1318,
+          1260,
+          71
+        ],
+        "polygon": [
+          [
+            144.64,
+            1308.11
+          ],
+          [
+            1404.48,
+            1327.9
+          ],
+          [
+            1403.36,
+            1398.89
+          ],
+          [
+            143.52,
+            1379.1
+          ]
+        ],
+        "baseline": [
+          [
+            143.77,
+            1363.48
+          ],
+          [
+            1403.61,
+            1383.27
+          ]
+        ],
+        "angle_degrees": 0.9,
+        "confidence": 1,
+        "reading_order": 13,
+        "transcription": {
+          "raw": "",
+          "normalised": "",
+          "diacritic_stripped": ""
+        },
+        "verification_status": "raw"
+      },
+      {
+        "id": "kcac_000409_p0004_l0014",
+        "line_id": "kcac_000409_p0004_l0014",
+        "bbox": [
+          134,
+          1399,
+          1257.11,
+          81
+        ],
+        "polygon": [
+          [
+            134.71,
+            1389.13
+          ],
+          [
+            1391.67,
+            1408.88
+          ],
+          [
+            1390.4,
+            1489.87
+          ],
+          [
+            133.44,
+            1470.12
+          ]
+        ],
+        "baseline": [
+          [
+            133.72,
+            1452.3
+          ],
+          [
+            1390.68,
+            1472.05
+          ]
+        ],
+        "angle_degrees": 0.9,
+        "confidence": 1,
+        "reading_order": 14,
+        "transcription": {
+          "raw": "",
+          "normalised": "",
+          "diacritic_stripped": ""
+        },
+        "verification_status": "raw"
+      },
+      {
+        "id": "kcac_000409_p0004_l0015",
+        "line_id": "kcac_000409_p0004_l0015",
+        "bbox": [
+          133,
+          1489,
+          1255,
+          69
+        ],
+        "polygon": [
+          [
+            133.62,
+            1479.15
+          ],
+          [
+            1388.46,
+            1498.86
+          ],
+          [
+            1387.38,
+            1567.85
+          ],
+          [
+            132.54,
+            1548.14
+          ]
+        ],
+        "baseline": [
+          [
+            132.77,
+            1532.96
+          ],
+          [
+            1387.62,
+            1552.67
+          ]
+        ],
+        "angle_degrees": 0.9,
+        "confidence": 1,
+        "reading_order": 15,
+        "transcription": {
+          "raw": "",
+          "normalised": "",
+          "diacritic_stripped": ""
+        },
+        "verification_status": "raw"
+      },
+      {
+        "id": "kcac_000409_p0004_l0016",
+        "line_id": "kcac_000409_p0004_l0016",
+        "bbox": [
+          125.26,
+          1567,
+          1265.74,
+          77
+        ],
+        "polygon": [
+          [
+            125.94,
+            1557.06
+          ],
+          [
+            1391.53,
+            1576.95
+          ],
+          [
+            1390.32,
+            1653.94
+          ],
+          [
+            124.73,
+            1634.05
+          ]
+        ],
+        "baseline": [
+          [
+            125,
+            1617.12
+          ],
+          [
+            1390.58,
+            1637
+          ]
+        ],
+        "angle_degrees": 0.9,
+        "confidence": 1,
+        "reading_order": 16,
+        "transcription": {
+          "raw": "",
+          "normalised": "",
+          "diacritic_stripped": ""
+        },
+        "verification_status": "raw"
+      },
+      {
+        "id": "kcac_000409_p0004_l0017",
+        "line_id": "kcac_000409_p0004_l0017",
+        "bbox": [
+          131,
+          1651,
+          1256,
+          77
+        ],
+        "polygon": [
+          [
+            131.68,
+            1641.14
+          ],
+          [
+            1387.53,
+            1660.87
+          ],
+          [
+            1386.32,
+            1737.86
+          ],
+          [
+            130.47,
+            1718.13
+          ]
+        ],
+        "baseline": [
+          [
+            130.74,
+            1701.19
+          ],
+          [
+            1386.58,
+            1720.92
+          ]
+        ],
+        "angle_degrees": 0.9,
+        "confidence": 1,
+        "reading_order": 17,
+        "transcription": {
+          "raw": "",
+          "normalised": "",
+          "diacritic_stripped": ""
+        },
+        "verification_status": "raw"
+      },
+      {
+        "id": "kcac_000409_p0004_l0018",
+        "line_id": "kcac_000409_p0004_l0018",
+        "bbox": [
+          131,
+          1735,
+          1251,
+          81
+        ],
+        "polygon": [
+          [
+            131.71,
+            1725.18
+          ],
+          [
+            1382.56,
+            1744.83
+          ],
+          [
+            1381.29,
+            1825.82
+          ],
+          [
+            130.44,
+            1806.17
+          ]
+        ],
+        "baseline": [
+          [
+            130.72,
+            1788.35
+          ],
+          [
+            1381.57,
+            1808
+          ]
+        ],
+        "angle_degrees": 0.9,
+        "confidence": 1,
+        "reading_order": 18,
+        "transcription": {
+          "raw": "",
+          "normalised": "",
+          "diacritic_stripped": ""
+        },
+        "verification_status": "raw"
+      },
+      {
+        "id": "kcac_000409_p0004_l0019",
+        "line_id": "kcac_000409_p0004_l0019",
+        "bbox": [
+          134,
+          1821,
+          1248,
+          72
+        ],
+        "polygon": [
+          [
+            134,
+            1821
+          ],
+          [
+            1382,
+            1821
+          ],
+          [
+            1382,
+            1893
+          ],
+          [
+            134,
+            1893
+          ]
+        ],
+        "baseline": [
+          [
+            134,
+            1877.16
+          ],
+          [
+            1382,
+            1877.16
+          ]
+        ],
+        "angle_degrees": 0,
+        "confidence": 1,
+        "reading_order": 19,
+        "transcription": {
+          "raw": "",
+          "normalised": "",
+          "diacritic_stripped": ""
+        },
+        "verification_status": "raw"
+      },
+      {
+        "id": "kcac_000409_p0004_l0020",
+        "line_id": "kcac_000409_p0004_l0020",
+        "bbox": [
+          132,
+          1912,
+          1232.93,
+          75
+        ],
+        "polygon": [
+          [
+            132,
+            1912
+          ],
+          [
+            1364.93,
+            1912
+          ],
+          [
+            1364.93,
+            1987
+          ],
+          [
+            132,
+            1987
+          ]
+        ],
+        "baseline": [
+          [
+            132,
+            1970.5
+          ],
+          [
+            1364.93,
+            1970.5
+          ]
+        ],
+        "angle_degrees": 0,
+        "confidence": 1,
+        "reading_order": 20,
+        "transcription": {
+          "raw": "",
+          "normalised": "",
+          "diacritic_stripped": ""
+        },
+        "verification_status": "raw"
+      },
+      {
+        "id": "kcac_000409_p0004_l0021",
+        "line_id": "kcac_000409_p0004_l0021",
+        "bbox": [
+          129,
+          2002,
+          1236,
+          75
+        ],
+        "polygon": [
+          [
+            129,
+            2002
+          ],
+          [
+            1365,
+            2002
+          ],
+          [
+            1365,
+            2077
+          ],
+          [
+            129,
+            2077
+          ]
+        ],
+        "baseline": [
+          [
+            129,
+            2060.5
+          ],
+          [
+            1365,
+            2060.5
+          ]
+        ],
+        "angle_degrees": 0,
+        "confidence": 1,
+        "reading_order": 21,
+        "transcription": {
+          "raw": "",
+          "normalised": "",
+          "diacritic_stripped": ""
+        },
+        "verification_status": "raw"
+      }
+    ]
+  },
+  "text_lines": [
+    {
+      "id": "kcac_000409_p0004_l0001",
+      "bbox": [
+        147,
+        331.75,
+        1262.2,
+        76.62
+      ],
+      "polygon": [
+        [
+          147.68,
+          321.85
+        ],
+        [
+          1409.72,
+          341.67
+        ],
+        [
+          1408.52,
+          418.28
+        ],
+        [
+          146.48,
+          398.45
+        ]
+      ],
+      "baseline": [
+        [
+          146.74,
+          381.6
+        ],
+        [
+          1408.79,
+          401.42
+        ]
+      ],
+      "angle_degrees": 0.9,
+      "confidence": 1,
+      "reading_order": 1,
+      "text_raw": "",
+      "text_normalised": "",
+      "text_diacritic_stripped": ""
+    },
+    {
+      "id": "kcac_000409_p0004_l0002",
+      "bbox": [
+        135,
+        409,
+        1275,
+        80.62
+      ],
+      "polygon": [
+        [
+          135.71,
+          398.99
+        ],
+        [
+          1410.55,
+          419.02
+        ],
+        [
+          1409.29,
+          499.63
+        ],
+        [
+          134.45,
+          479.6
+        ]
+      ],
+      "baseline": [
+        [
+          134.72,
+          461.87
+        ],
+        [
+          1409.57,
+          481.89
+        ]
+      ],
+      "angle_degrees": 0.9,
+      "confidence": 1,
+      "reading_order": 2,
+      "text_raw": "",
+      "text_normalised": "",
+      "text_diacritic_stripped": ""
+    },
+    {
+      "id": "kcac_000409_p0004_l0003",
+      "bbox": [
+        136.39,
+        505.78,
+        1274.01,
+        62.78
+      ],
+      "polygon": [
+        [
+          136.96,
+          495.78
+        ],
+        [
+          1410.81,
+          515.79
+        ],
+        [
+          1409.82,
+          578.56
+        ],
+        [
+          135.97,
+          558.55
+        ]
+      ],
+      "baseline": [
+        [
+          136.19,
+          544.74
+        ],
+        [
+          1410.04,
+          564.75
+        ]
+      ],
+      "angle_degrees": 0.9,
+      "confidence": 1,
+      "reading_order": 3,
+      "text_raw": "",
+      "text_normalised": "",
+      "text_diacritic_stripped": ""
+    },
+    {
+      "id": "kcac_000409_p0004_l0004",
+      "bbox": [
+        144.47,
+        575.2,
+        1268.19,
+        82.9
+      ],
+      "polygon": [
+        [
+          145.2,
+          565.25
+        ],
+        [
+          1413.23,
+          585.17
+        ],
+        [
+          1411.93,
+          668.05
+        ],
+        [
+          143.9,
+          648.13
+        ]
+      ],
+      "baseline": [
+        [
+          144.18,
+          629.9
+        ],
+        [
+          1412.22,
+          649.82
+        ]
+      ],
+      "angle_degrees": 0.9,
+      "confidence": 1,
+      "reading_order": 4,
+      "text_raw": "",
+      "text_normalised": "",
+      "text_diacritic_stripped": ""
+    },
+    {
+      "id": "kcac_000409_p0004_l0005",
+      "bbox": [
+        147,
+        658,
+        1261,
+        82
+      ],
+      "polygon": [
+        [
+          147.72,
+          648.1
+        ],
+        [
+          1408.57,
+          667.91
+        ],
+        [
+          1407.28,
+          749.9
+        ],
+        [
+          146.43,
+          730.09
+        ]
+      ],
+      "baseline": [
+        [
+          146.72,
+          712.05
+        ],
+        [
+          1407.56,
+          731.86
+        ]
+      ],
+      "angle_degrees": 0.9,
+      "confidence": 1,
+      "reading_order": 5,
+      "text_raw": "",
+      "text_normalised": "",
+      "text_diacritic_stripped": ""
+    },
+    {
+      "id": "kcac_000409_p0004_l0006",
+      "bbox": [
+        147,
+        739,
+        1259,
+        78
+      ],
+      "polygon": [
+        [
+          147.69,
+          729.12
+        ],
+        [
+          1406.53,
+          748.89
+        ],
+        [
+          1405.31,
+          826.88
+        ],
+        [
+          146.47,
+          807.11
+        ]
+      ],
+      "baseline": [
+        [
+          146.73,
+          789.95
+        ],
+        [
+          1405.58,
+          809.73
+        ]
+      ],
+      "angle_degrees": 0.9,
+      "confidence": 1,
+      "reading_order": 6,
+      "text_raw": "",
+      "text_normalised": "",
+      "text_diacritic_stripped": ""
+    },
+    {
+      "id": "kcac_000409_p0004_l0007",
+      "bbox": [
+        150,
+        824,
+        1252,
+        82
+      ],
+      "polygon": [
+        [
+          150.72,
+          814.17
+        ],
+        [
+          1402.57,
+          833.84
+        ],
+        [
+          1401.28,
+          915.83
+        ],
+        [
+          149.43,
+          896.16
+        ]
+      ],
+      "baseline": [
+        [
+          149.72,
+          878.12
+        ],
+        [
+          1401.56,
+          897.79
+        ]
+      ],
+      "angle_degrees": 0.9,
+      "confidence": 1,
+      "reading_order": 7,
+      "text_raw": "",
+      "text_normalised": "",
+      "text_diacritic_stripped": ""
+    },
+    {
+      "id": "kcac_000409_p0004_l0008",
+      "bbox": [
+        145,
+        899,
+        1262.92,
+        81
+      ],
+      "polygon": [
+        [
+          145.71,
+          889.09
+        ],
+        [
+          1408.48,
+          908.92
+        ],
+        [
+          1407.21,
+          989.91
+        ],
+        [
+          144.44,
+          970.08
+        ]
+      ],
+      "baseline": [
+        [
+          144.72,
+          952.26
+        ],
+        [
+          1407.49,
+          972.1
+        ]
+      ],
+      "angle_degrees": 0.9,
+      "confidence": 1,
+      "reading_order": 8,
+      "text_raw": "",
+      "text_normalised": "",
+      "text_diacritic_stripped": ""
+    },
+    {
+      "id": "kcac_000409_p0004_l0009",
+      "bbox": [
+        140,
+        989,
+        1261,
+        73
+      ],
+      "polygon": [
+        [
+          140.65,
+          979.1
+        ],
+        [
+          1401.5,
+          998.91
+        ],
+        [
+          1400.35,
+          1071.9
+        ],
+        [
+          139.5,
+          1052.09
+        ]
+      ],
+      "baseline": [
+        [
+          139.76,
+          1036.03
+        ],
+        [
+          1400.6,
+          1055.84
+        ]
+      ],
+      "angle_degrees": 0.9,
+      "confidence": 1,
+      "reading_order": 9,
+      "text_raw": "",
+      "text_normalised": "",
+      "text_diacritic_stripped": ""
+    },
+    {
+      "id": "kcac_000409_p0004_l0010",
+      "bbox": [
+        148.99,
+        1069,
+        1256.01,
+        82
+      ],
+      "polygon": [
+        [
+          149.71,
+          1059.14
+        ],
+        [
+          1405.57,
+          1078.87
+        ],
+        [
+          1404.28,
+          1160.86
+        ],
+        [
+          148.42,
+          1141.13
+        ]
+      ],
+      "baseline": [
+        [
+          148.71,
+          1123.09
+        ],
+        [
+          1404.56,
+          1142.82
+        ]
+      ],
+      "angle_degrees": 0.9,
+      "confidence": 1,
+      "reading_order": 10,
+      "text_raw": "",
+      "text_normalised": "",
+      "text_diacritic_stripped": ""
+    },
+    {
+      "id": "kcac_000409_p0004_l0011",
+      "bbox": [
+        153,
+        1153,
+        1250,
+        74
+      ],
+      "polygon": [
+        [
+          153.66,
+          1143.19
+        ],
+        [
+          1403.5,
+          1162.82
+        ],
+        [
+          1402.34,
+          1236.81
+        ],
+        [
+          152.5,
+          1217.18
+        ]
+      ],
+      "baseline": [
+        [
+          152.75,
+          1200.9
+        ],
+        [
+          1402.6,
+          1220.53
+        ]
+      ],
+      "angle_degrees": 0.9,
+      "confidence": 1,
+      "reading_order": 11,
+      "text_raw": "",
+      "text_normalised": "",
+      "text_diacritic_stripped": ""
+    },
+    {
+      "id": "kcac_000409_p0004_l0012",
+      "bbox": [
+        137,
+        1239,
+        1262,
+        73
+      ],
+      "polygon": [
+        [
+          137.65,
+          1229.09
+        ],
+        [
+          1399.5,
+          1248.92
+        ],
+        [
+          1398.35,
+          1321.91
+        ],
+        [
+          136.5,
+          1302.08
+        ]
+      ],
+      "baseline": [
+        [
+          136.76,
+          1286.03
+        ],
+        [
+          1398.6,
+          1305.85
+        ]
+      ],
+      "angle_degrees": 0.9,
+      "confidence": 1,
+      "reading_order": 12,
+      "text_raw": "",
+      "text_normalised": "",
+      "text_diacritic_stripped": ""
+    },
+    {
+      "id": "kcac_000409_p0004_l0013",
+      "bbox": [
+        144,
+        1318,
+        1260,
+        71
+      ],
+      "polygon": [
+        [
+          144.64,
+          1308.11
+        ],
+        [
+          1404.48,
+          1327.9
+        ],
+        [
+          1403.36,
+          1398.89
+        ],
+        [
+          143.52,
+          1379.1
+        ]
+      ],
+      "baseline": [
+        [
+          143.77,
+          1363.48
+        ],
+        [
+          1403.61,
+          1383.27
+        ]
+      ],
+      "angle_degrees": 0.9,
+      "confidence": 1,
+      "reading_order": 13,
+      "text_raw": "",
+      "text_normalised": "",
+      "text_diacritic_stripped": ""
+    },
+    {
+      "id": "kcac_000409_p0004_l0014",
+      "bbox": [
+        134,
+        1399,
+        1257.11,
+        81
+      ],
+      "polygon": [
+        [
+          134.71,
+          1389.13
+        ],
+        [
+          1391.67,
+          1408.88
+        ],
+        [
+          1390.4,
+          1489.87
+        ],
+        [
+          133.44,
+          1470.12
+        ]
+      ],
+      "baseline": [
+        [
+          133.72,
+          1452.3
+        ],
+        [
+          1390.68,
+          1472.05
+        ]
+      ],
+      "angle_degrees": 0.9,
+      "confidence": 1,
+      "reading_order": 14,
+      "text_raw": "",
+      "text_normalised": "",
+      "text_diacritic_stripped": ""
+    },
+    {
+      "id": "kcac_000409_p0004_l0015",
+      "bbox": [
+        133,
+        1489,
+        1255,
+        69
+      ],
+      "polygon": [
+        [
+          133.62,
+          1479.15
+        ],
+        [
+          1388.46,
+          1498.86
+        ],
+        [
+          1387.38,
+          1567.85
+        ],
+        [
+          132.54,
+          1548.14
+        ]
+      ],
+      "baseline": [
+        [
+          132.77,
+          1532.96
+        ],
+        [
+          1387.62,
+          1552.67
+        ]
+      ],
+      "angle_degrees": 0.9,
+      "confidence": 1,
+      "reading_order": 15,
+      "text_raw": "",
+      "text_normalised": "",
+      "text_diacritic_stripped": ""
+    },
+    {
+      "id": "kcac_000409_p0004_l0016",
+      "bbox": [
+        125.26,
+        1567,
+        1265.74,
+        77
+      ],
+      "polygon": [
+        [
+          125.94,
+          1557.06
+        ],
+        [
+          1391.53,
+          1576.95
+        ],
+        [
+          1390.32,
+          1653.94
+        ],
+        [
+          124.73,
+          1634.05
+        ]
+      ],
+      "baseline": [
+        [
+          125,
+          1617.12
+        ],
+        [
+          1390.58,
+          1637
+        ]
+      ],
+      "angle_degrees": 0.9,
+      "confidence": 1,
+      "reading_order": 16,
+      "text_raw": "",
+      "text_normalised": "",
+      "text_diacritic_stripped": ""
+    },
+    {
+      "id": "kcac_000409_p0004_l0017",
+      "bbox": [
+        131,
+        1651,
+        1256,
+        77
+      ],
+      "polygon": [
+        [
+          131.68,
+          1641.14
+        ],
+        [
+          1387.53,
+          1660.87
+        ],
+        [
+          1386.32,
+          1737.86
+        ],
+        [
+          130.47,
+          1718.13
+        ]
+      ],
+      "baseline": [
+        [
+          130.74,
+          1701.19
+        ],
+        [
+          1386.58,
+          1720.92
+        ]
+      ],
+      "angle_degrees": 0.9,
+      "confidence": 1,
+      "reading_order": 17,
+      "text_raw": "",
+      "text_normalised": "",
+      "text_diacritic_stripped": ""
+    },
+    {
+      "id": "kcac_000409_p0004_l0018",
+      "bbox": [
+        131,
+        1735,
+        1251,
+        81
+      ],
+      "polygon": [
+        [
+          131.71,
+          1725.18
+        ],
+        [
+          1382.56,
+          1744.83
+        ],
+        [
+          1381.29,
+          1825.82
+        ],
+        [
+          130.44,
+          1806.17
+        ]
+      ],
+      "baseline": [
+        [
+          130.72,
+          1788.35
+        ],
+        [
+          1381.57,
+          1808
+        ]
+      ],
+      "angle_degrees": 0.9,
+      "confidence": 1,
+      "reading_order": 18,
+      "text_raw": "",
+      "text_normalised": "",
+      "text_diacritic_stripped": ""
+    },
+    {
+      "id": "kcac_000409_p0004_l0019",
+      "bbox": [
+        134,
+        1821,
+        1248,
+        72
+      ],
+      "polygon": [
+        [
+          134,
+          1821
+        ],
+        [
+          1382,
+          1821
+        ],
+        [
+          1382,
+          1893
+        ],
+        [
+          134,
+          1893
+        ]
+      ],
+      "baseline": [
+        [
+          134,
+          1877.16
+        ],
+        [
+          1382,
+          1877.16
+        ]
+      ],
+      "angle_degrees": 0,
+      "confidence": 1,
+      "reading_order": 19,
+      "text_raw": "",
+      "text_normalised": "",
+      "text_diacritic_stripped": ""
+    },
+    {
+      "id": "kcac_000409_p0004_l0020",
+      "bbox": [
+        132,
+        1912,
+        1232.93,
+        75
+      ],
+      "polygon": [
+        [
+          132,
+          1912
+        ],
+        [
+          1364.93,
+          1912
+        ],
+        [
+          1364.93,
+          1987
+        ],
+        [
+          132,
+          1987
+        ]
+      ],
+      "baseline": [
+        [
+          132,
+          1970.5
+        ],
+        [
+          1364.93,
+          1970.5
+        ]
+      ],
+      "angle_degrees": 0,
+      "confidence": 1,
+      "reading_order": 20,
+      "text_raw": "",
+      "text_normalised": "",
+      "text_diacritic_stripped": ""
+    },
+    {
+      "id": "kcac_000409_p0004_l0021",
+      "bbox": [
+        129,
+        2002,
+        1236,
+        75
+      ],
+      "polygon": [
+        [
+          129,
+          2002
+        ],
+        [
+          1365,
+          2002
+        ],
+        [
+          1365,
+          2077
+        ],
+        [
+          129,
+          2077
+        ]
+      ],
+      "baseline": [
+        [
+          129,
+          2060.5
+        ],
+        [
+          1365,
+          2060.5
+        ]
+      ],
+      "angle_degrees": 0,
+      "confidence": 1,
+      "reading_order": 21,
+      "text_raw": "",
+      "text_normalised": "",
+      "text_diacritic_stripped": ""
+    }
+  ],
+  "layout": [
+    {
+      "id": "kcac_000409_p0004_r0001",
+      "bbox": [
+        121.3,
+        325.13,
+        1290.27,
+        1754.3
+      ],
+      "polygon": [
+        [
+          135.16,
+          315.11
+        ],
+        [
+          1425.26,
+          335.37
+        ],
+        [
+          1397.71,
+          2089.46
+        ],
+        [
+          107.6,
+          2069.19
+        ]
+      ],
+      "label": "TextRegion",
+      "angle_degrees": 0.9,
+      "score": 1,
+      "reading_order": 1
+    },
+    {
+      "id": "kcac_000409_p0004_r0002",
+      "bbox": [
+        673.5,
+        2194.1,
+        153.2,
+        46.8
+      ],
+      "polygon": [
+        [
+          673.5,
+          2194.1
+        ],
+        [
+          826.7,
+          2194.1
+        ],
+        [
+          826.7,
+          2240.9
+        ],
+        [
+          673.5,
+          2240.9
+        ]
+      ],
+      "label": "PageNumber",
+      "angle_degrees": 0,
+      "score": 1,
+      "reading_order": 2
+    }
+  ]
+}

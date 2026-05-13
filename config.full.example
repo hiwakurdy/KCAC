@@ -1,0 +1,60 @@
+input:
+  books_jsonl: input/books.jsonl
+  images_root: ds_test/409/images
+
+output:
+  root: output
+
+engines:
+  tesseract:
+    enabled: true
+    lang: ckb
+    psm: 6
+  kraken:
+    enabled: true
+    model: models/kraken/kraken_arabic_historical_v1.mlmodel
+  calamari:
+    enabled: true
+    model: models/calamari/calamari_arabic_v1.ckpt
+    executable: calamari-predict
+  qwen2vl:
+    enabled: true
+    backend: ollama
+    line_source: text_lines
+    annotations_root: ds_test/409/annotationa
+    model_id: qwen25vl-sorani-ocr:latest
+    ollama_host: http://localhost:11434
+    use_local_gpu: true
+    rate_limit_rpm: 30
+    num_ctx: 2048
+    num_predict: 256
+    temperature: 0
+    max_image_side: 1280
+    timeout_seconds: 180
+  claude:
+    enabled: true
+    model: claude-sonnet-4-7-20260101
+    rate_limit_rpm: 50
+    monthly_budget_usd: 200
+    max_tokens: 256
+    estimated_page_usd: 0.25
+
+consensus:
+  iou_threshold_for_line_alignment: 0.5
+  auto_accept_min_agreeing_engines: 3
+  auto_accept_max_pairwise_edits: 0
+  near_agreement_max_edits: 2
+
+normalisation:
+  yeh: arabic_to_kurdish
+  kaf: arabic_to_kurdish
+  strip_tashkeel: true
+  unicode_form: NFC
+
+splits:
+  test_book_ids: ["kcac_000099", "kcac_000152"]
+  val_book_ids: ["kcac_000018"]
+
+dashboards:
+  daily_report: true
+  upload_to_wandb: false

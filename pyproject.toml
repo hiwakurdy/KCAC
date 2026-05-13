@@ -1,0 +1,28 @@
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "N", "RUF"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+warn_unused_configs = true
+exclude = ["output", "ds_test"]
+
+[[tool.mypy.overrides]]
+module = [
+  "anthropic.*",
+  "calamari_ocr.*",
+  "kraken.*",
+  "lxml.*",
+  "matplotlib.*",
+  "PIL.*",
+  "pytesseract.*",
+  "torch.*",
+  "transformers.*",
+  "yaml.*",
+]
+ignore_missing_imports = true

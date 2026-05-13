@@ -1,0 +1,38 @@
+# KCAC Digital Library Client example configuration.
+# CLI flags override these values.
+
+base_url: https://archive.kcac.org
+output: ./dataset
+
+# One or more book ids.
+book_ids:
+  - 399
+  - 2367
+  - 276
+  - 19
+  - 392
+  - 911
+
+# Alternatively:
+# book_ids_file: books.txt
+
+# Politeness defaults. Increase tile_delay if you receive HTTP 429.
+tile_delay: 1.5
+book_delay: 5.0
+max_concurrent: 1
+
+# Request retry behavior for connection errors and timeouts.
+max_retries: 3
+
+# Stitched page JPEG quality. Pillow's valid high-quality maximum is 95.
+jpeg_quality: 95
+
+# Optional thumbnail downloads add extra requests, so this is off by default.
+download_thumbs: false
+
+# OCR text extraction uses kcac_text_extract.py.
+# Delay between Clip/OCR page requests.
+page_delay: 2.0
+
+# Optional inset from page edges when extracting OCR text.
+ocr_margin: 0

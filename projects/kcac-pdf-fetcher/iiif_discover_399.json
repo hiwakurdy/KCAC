@@ -1,0 +1,723 @@
+{
+  "viewer_url": "https://archive.kcac.org/zoom/399/view",
+  "summary": {
+    "manifest_urls": [],
+    "manifest_context_urls": [],
+    "info_json_urls": [],
+    "image_api_urls": [],
+    "image_service_urls": []
+  },
+  "network": [
+    {
+      "url": "https://archive.kcac.org/zoom/399/view",
+      "method": "GET",
+      "resource_type": "document",
+      "status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/styles/vendor.b3e454d9.css",
+      "method": "GET",
+      "resource_type": "stylesheet",
+      "status": 200,
+      "content_type": "text/css",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/styles/main.b09b9780.css",
+      "method": "GET",
+      "resource_type": "stylesheet",
+      "status": 200,
+      "content_type": "text/css",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/styles/flowplayer-adds.228db8bf.css",
+      "method": "GET",
+      "resource_type": "stylesheet",
+      "status": 200,
+      "content_type": "text/css",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/styles/ltr.3b2f6ec5.css",
+      "method": "GET",
+      "resource_type": "stylesheet",
+      "status": 200,
+      "content_type": "text/css",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/styles/rtl.c3574c5c.css",
+      "method": "GET",
+      "resource_type": "stylesheet",
+      "status": 200,
+      "content_type": "text/css",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/scripts/mi-templates.d41d8cd9.js",
+      "method": "GET",
+      "resource_type": "script",
+      "status": 200,
+      "content_type": "application/javascript",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/scripts/lib/compatibility.00003.js",
+      "method": "GET",
+      "resource_type": "script",
+      "status": 200,
+      "content_type": "application/javascript",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/scripts/config.a0137e17.js",
+      "method": "GET",
+      "resource_type": "script",
+      "status": 200,
+      "content_type": "application/javascript; charset=utf-8",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/scripts/uiConfig.47140cdf.js",
+      "method": "GET",
+      "resource_type": "script",
+      "status": 200,
+      "content_type": "application/javascript; charset=utf-8",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/scripts/lib/modernizr.custom.34008.js",
+      "method": "GET",
+      "resource_type": "script",
+      "status": 200,
+      "content_type": "application/javascript",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/scripts/mizoomjs.66d44785.js",
+      "method": "GET",
+      "resource_type": "script",
+      "status": 200,
+      "content_type": "application/javascript",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/scripts/user.428bffa9.js",
+      "method": "GET",
+      "resource_type": "script",
+      "status": 200,
+      "content_type": "application/javascript",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/scripts/browse.2bcc1fd7.js",
+      "method": "GET",
+      "resource_type": "script",
+      "status": 200,
+      "content_type": "application/javascript",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/scripts/store.9fb786a4.js",
+      "method": "GET",
+      "resource_type": "script",
+      "status": 200,
+      "content_type": "application/javascript",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/scripts/users.b225dd74.js",
+      "method": "GET",
+      "resource_type": "script",
+      "status": 200,
+      "content_type": "application/javascript",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/scripts/form.7007c5f6.js",
+      "method": "GET",
+      "resource_type": "script",
+      "status": 200,
+      "content_type": "application/javascript",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/scripts/watermark.f51215b4.js",
+      "method": "GET",
+      "resource_type": "script",
+      "status": 200,
+      "content_type": "application/javascript",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/scripts/external-trackers/external-trackers.b3cd7405.js",
+      "method": "GET",
+      "resource_type": "script",
+      "status": 200,
+      "content_type": "application/javascript",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/scripts/backup.6748c518.js",
+      "method": "GET",
+      "resource_type": "script",
+      "status": 200,
+      "content_type": "application/javascript",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/scripts/roles.cdc42b0b.js",
+      "method": "GET",
+      "resource_type": "script",
+      "status": 200,
+      "content_type": "application/javascript",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/scripts/svgcreator.fcdf63d9.js",
+      "method": "GET",
+      "resource_type": "script",
+      "status": 200,
+      "content_type": "application/javascript",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/scripts/structureddata.0875bac9.js",
+      "method": "GET",
+      "resource_type": "script",
+      "status": 200,
+      "content_type": "application/javascript",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/scripts/redirects.a2a84d13.js",
+      "method": "GET",
+      "resource_type": "script",
+      "status": 200,
+      "content_type": "application/javascript",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/scripts/sitemap.a84b5f9b.js",
+      "method": "GET",
+      "resource_type": "script",
+      "status": 200,
+      "content_type": "application/javascript",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/scripts/upload.d4b1014f.js",
+      "method": "GET",
+      "resource_type": "script",
+      "status": 200,
+      "content_type": "application/javascript",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/scripts/mediainfo.05c15aff.js",
+      "method": "GET",
+      "resource_type": "script",
+      "status": 200,
+      "content_type": "application/javascript",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/scripts/admin.1dbd8a9f.js",
+      "method": "GET",
+      "resource_type": "script",
+      "status": 200,
+      "content_type": "application/javascript",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/scripts/pages.31b48c68.js",
+      "method": "GET",
+      "resource_type": "script",
+      "status": 200,
+      "content_type": "application/javascript",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/scripts/zoom.06584f6e.js",
+      "method": "GET",
+      "resource_type": "script",
+      "status": 200,
+      "content_type": "application/javascript",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/scripts/main.8f17eec2.js",
+      "method": "GET",
+      "resource_type": "script",
+      "status": 200,
+      "content_type": "application/javascript",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/scripts/lib.4d282cd0.js",
+      "method": "GET",
+      "resource_type": "script",
+      "status": 200,
+      "content_type": "application/javascript",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/scripts/vendor.6cb9a146.js",
+      "method": "GET",
+      "resource_type": "script",
+      "status": 200,
+      "content_type": "application/javascript",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/styles/fonts/raleway-regular-webfont.woff2",
+      "method": "GET",
+      "resource_type": "font",
+      "status": 200,
+      "content_type": "font/woff2",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/styles/fonts/ui-icons.woff2",
+      "method": "GET",
+      "resource_type": "font",
+      "status": 200,
+      "content_type": "font/woff2",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/styles/fonts/ui-icons-extra.ttf?squ7n9",
+      "method": "GET",
+      "resource_type": "font",
+      "status": 200,
+      "content_type": "application/octet-stream",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/build.json",
+      "method": "GET",
+      "resource_type": "xhr",
+      "status": 200,
+      "content_type": "application/json",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/views/base/legacy-view.html",
+      "method": "GET",
+      "resource_type": "xhr",
+      "status": 200,
+      "content_type": "text/html",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/api/app/config",
+      "method": "GET",
+      "resource_type": "xhr",
+      "status": 200,
+      "content_type": "application/json",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/views/zoom/osd-zoom.html",
+      "method": "GET",
+      "resource_type": "xhr",
+      "status": 200,
+      "content_type": "text/html",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/api/item/399/pages",
+      "method": "GET",
+      "resource_type": "xhr",
+      "status": 200,
+      "content_type": "application/json",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://httpbin.org/ip",
+      "method": "HEAD",
+      "resource_type": "xhr",
+      "status": null,
+      "content_type": null,
+      "matched_signals": [],
+      "error": "net::ERR_CONNECTION_CLOSED"
+    },
+    {
+      "url": "https://archive.kcac.org/styles/fonts/raleway-bold-webfont.woff2",
+      "method": "GET",
+      "resource_type": "font",
+      "status": 200,
+      "content_type": "font/woff2",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/undefined",
+      "method": "GET",
+      "resource_type": "image",
+      "status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/api/page/38642/tile/0/0/0",
+      "method": "GET",
+      "resource_type": "image",
+      "status": 200,
+      "content_type": "image/jpeg",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://www.googletagmanager.com/gtag/js?id=G-F2NHT77MZ6",
+      "method": "GET",
+      "resource_type": "script",
+      "status": 200,
+      "content_type": "application/javascript; charset=UTF-8",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/api/page/38642/tile/1/0/0",
+      "method": "GET",
+      "resource_type": "image",
+      "status": 200,
+      "content_type": "image/jpeg",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/api/item/399/meta",
+      "method": "GET",
+      "resource_type": "xhr",
+      "status": 200,
+      "content_type": "application/json",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/%7B%7B%20link.thumbnail%20%7D%7D",
+      "method": "GET",
+      "resource_type": "image",
+      "status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/api/item/399/thumbnail",
+      "method": "GET",
+      "resource_type": "image",
+      "status": 200,
+      "content_type": "image/jpeg",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/api/item/399/meta",
+      "method": "GET",
+      "resource_type": "xhr",
+      "status": 200,
+      "content_type": "application/json",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/api/page/38642/thumbnail",
+      "method": "GET",
+      "resource_type": "image",
+      "status": 200,
+      "content_type": "image/jpeg",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/api/page/38644/thumbnail",
+      "method": "GET",
+      "resource_type": "image",
+      "status": 200,
+      "content_type": "image/jpeg",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/api/page/38642/tile/2/0/0",
+      "method": "GET",
+      "resource_type": "image",
+      "status": 200,
+      "content_type": "image/jpeg",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/api/page/38643/thumbnail",
+      "method": "GET",
+      "resource_type": "image",
+      "status": 200,
+      "content_type": "image/jpeg",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/api/page/38645/thumbnail",
+      "method": "GET",
+      "resource_type": "image",
+      "status": 200,
+      "content_type": "image/jpeg",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-F2NHT77MZ6&gtm=45je64t1v9186102110za200zd9186102110&_p=1777716061238&gcd=13l3l3l3l1l1&npa=0&dma=0&are=1&cid=875451396.1777716061&frm=0&pscdl=noapi&rcb=5&sr=1280x720&uaa=x86&uab=64&uafvl=HeadlessChrome%3B147.0.7727.15%7CNot.A%252FBrand%3B8.0.0.0%7CChromium%3B147.0.7727.15&uam=&uamb=0&uap=Windows&uapv=&uaw=0&ul=ru&_s=1&tag_exp=0~115938466~115938468~116363098~117384405~118689382&sid=1777716061&sct=1&seg=0&dl=https%3A%2F%2Farchive.kcac.org%2Fzoom%2F399%2Fview%3Fpage%3D1%26p%3Dseparate%26tool%3Dinfo&dt=The%20Kurdish%20Writer%20N%C2%BA%201%20%7C%20KCAC%20Archive&en=page_view&_fv=1&_nsi=1&_ss=1&_ee=1&ep.debug_mode=false&tfd=15431",
+      "method": "POST",
+      "resource_type": "fetch",
+      "status": 204,
+      "content_type": "text/plain",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-F2NHT77MZ6&gtm=45je64t1v9186102110za200zd9186102110&_p=1777716061238&gcd=13l3l3l3l1l1&npa=0&dma=0&are=1&cid=875451396.1777716061&frm=0&pscdl=noapi&rcb=5&sr=1280x720&uaa=x86&uab=64&uafvl=HeadlessChrome%3B147.0.7727.15%7CNot.A%252FBrand%3B8.0.0.0%7CChromium%3B147.0.7727.15&uam=&uamb=0&uap=Windows&uapv=&uaw=0&ul=ru&_s=1&tag_exp=0~115938466~115938468~116363098~117384405~118689382&sid=1777716061&sct=1&seg=0&dl=https%3A%2F%2Farchive.kcac.org%2Fzoom%2F399%2Fview%3Fpage%3D1%26p%3Dseparate%26tool%3Dinfo&dt=The%20Kurdish%20Writer%20N%C2%BA%201%20%7C%20KCAC%20Archive&en=page_view&_fv=1&_nsi=1&_ss=1&_ee=1&ep.debug_mode=false&tfd=15431",
+      "method": "POST",
+      "resource_type": "fetch",
+      "status": null,
+      "content_type": null,
+      "matched_signals": [],
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://archive.kcac.org/api/page/38648/thumbnail",
+      "method": "GET",
+      "resource_type": "image",
+      "status": 200,
+      "content_type": "image/jpeg",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/api/page/38646/thumbnail",
+      "method": "GET",
+      "resource_type": "image",
+      "status": 200,
+      "content_type": "image/jpeg",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/api/page/38647/thumbnail",
+      "method": "GET",
+      "resource_type": "image",
+      "status": 200,
+      "content_type": "image/jpeg",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/api/page/38649/thumbnail",
+      "method": "GET",
+      "resource_type": "image",
+      "status": 200,
+      "content_type": "image/jpeg",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/api/page/38650/thumbnail",
+      "method": "GET",
+      "resource_type": "image",
+      "status": 200,
+      "content_type": "image/jpeg",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/api/page/38652/thumbnail",
+      "method": "GET",
+      "resource_type": "image",
+      "status": 200,
+      "content_type": "image/jpeg",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/api/page/38651/thumbnail",
+      "method": "GET",
+      "resource_type": "image",
+      "status": 200,
+      "content_type": "image/jpeg",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/api/page/38653/thumbnail",
+      "method": "GET",
+      "resource_type": "image",
+      "status": 200,
+      "content_type": "image/jpeg",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/api/page/38654/thumbnail",
+      "method": "GET",
+      "resource_type": "image",
+      "status": 200,
+      "content_type": "image/jpeg",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/api/page/38655/thumbnail",
+      "method": "GET",
+      "resource_type": "image",
+      "status": 200,
+      "content_type": "image/jpeg",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/api/page/38656/thumbnail",
+      "method": "GET",
+      "resource_type": "image",
+      "status": 200,
+      "content_type": "image/jpeg",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/api/page/38642/tile/3/1/0",
+      "method": "GET",
+      "resource_type": "image",
+      "status": 200,
+      "content_type": "image/jpeg",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/api/page/38642/tile/3/0/0",
+      "method": "GET",
+      "resource_type": "image",
+      "status": 200,
+      "content_type": "image/jpeg",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-F2NHT77MZ6&gtm=45je64t1v9186102110za200zd9186102110&_p=1777716061238&gcd=13l3l3l3l1l1&npa=0&dma=0&_eu=AEAAAAQ&ae=a&are=1&cid=875451396.1777716061&frm=0&pscdl=noapi&rcb=5&sr=1280x720&uaa=x86&uab=64&uafvl=HeadlessChrome%3B147.0.7727.15%7CNot.A%252FBrand%3B8.0.0.0%7CChromium%3B147.0.7727.15&uam=&uamb=0&uap=Windows&uapv=&uaw=0&ul=ru&_s=2&tag_exp=0~115938466~115938468~116363098~117384405~118689382&sid=1777716061&sct=1&seg=0&dl=https%3A%2F%2Farchive.kcac.org%2Fzoom%2F399%2Fview%3Fpage%3D1%26p%3Dseparate%26tool%3Dinfo&dt=The%20Kurdish%20Writer%20N%C2%BA%201%20%7C%20KCAC%20Archive&en=scroll&ep.debug_mode=false&epn.percent_scrolled=90&_et=3&tfd=20436",
+      "method": "POST",
+      "resource_type": "fetch",
+      "status": 204,
+      "content_type": "text/plain",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-F2NHT77MZ6&gtm=45je64t1v9186102110za200zd9186102110&_p=1777716061238&gcd=13l3l3l3l1l1&npa=0&dma=0&_eu=AEAAAAQ&ae=a&are=1&cid=875451396.1777716061&frm=0&pscdl=noapi&rcb=5&sr=1280x720&uaa=x86&uab=64&uafvl=HeadlessChrome%3B147.0.7727.15%7CNot.A%252FBrand%3B8.0.0.0%7CChromium%3B147.0.7727.15&uam=&uamb=0&uap=Windows&uapv=&uaw=0&ul=ru&_s=2&tag_exp=0~115938466~115938468~116363098~117384405~118689382&sid=1777716061&sct=1&seg=0&dl=https%3A%2F%2Farchive.kcac.org%2Fzoom%2F399%2Fview%3Fpage%3D1%26p%3Dseparate%26tool%3Dinfo&dt=The%20Kurdish%20Writer%20N%C2%BA%201%20%7C%20KCAC%20Archive&en=scroll&ep.debug_mode=false&epn.percent_scrolled=90&_et=3&tfd=20436",
+      "method": "POST",
+      "resource_type": "fetch",
+      "status": null,
+      "content_type": null,
+      "matched_signals": [],
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://archive.kcac.org/api/page/38642/tile/4/1/0",
+      "method": "GET",
+      "resource_type": "image",
+      "status": 200,
+      "content_type": "image/jpeg",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/api/page/38642/tile/4/1/1",
+      "method": "GET",
+      "resource_type": "image",
+      "status": 200,
+      "content_type": "image/jpeg",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/api/page/38642/tile/4/0/0",
+      "method": "GET",
+      "resource_type": "image",
+      "status": 200,
+      "content_type": "image/jpeg",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/api/page/38642/tile/4/2/0",
+      "method": "GET",
+      "resource_type": "image",
+      "status": 200,
+      "content_type": "image/jpeg",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/api/page/38642/tile/4/0/1",
+      "method": "GET",
+      "resource_type": "image",
+      "status": 200,
+      "content_type": "image/jpeg",
+      "matched_signals": [],
+      "error": null
+    },
+    {
+      "url": "https://archive.kcac.org/api/page/38642/tile/4/2/1",
+      "method": "GET",
+      "resource_type": "image",
+      "status": 200,
+      "content_type": "image/jpeg",
+      "matched_signals": [],
+      "error": null
+    }
+  ]
+}

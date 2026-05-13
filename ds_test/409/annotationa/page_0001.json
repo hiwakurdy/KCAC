@@ -1,0 +1,1047 @@
+{
+  "schema_name": "kcac_document_understanding_annotation",
+  "schema_version": "0.1",
+  "standards_alignment": [
+    "PAGE XML",
+    "ALTO XML",
+    "METS/MODS",
+    "TEI P5",
+    "IIIF Presentation 3.0",
+    "HuggingFace datasets",
+    "BCP 47",
+    "SPDX",
+    "Datasheet for Datasets"
+  ],
+  "file": "page_0001.jpg",
+  "width": 1733,
+  "height": 2480,
+  "bbox_format": "coco_xywh",
+  "stable_ids": {
+    "book_id": "kcac_000409",
+    "page_id": "kcac_000409_p0001"
+  },
+  "book": {
+    "title_original": "ڕۆژنامەی ئاکرێ",
+    "title_normalised": "ڕۆژنامەی ئاکرێ",
+    "authors": "شاکر فتاح",
+    "authors_normalised": "",
+    "editor": "",
+    "compiler": "",
+    "translator": "",
+    "publisher": "",
+    "place_of_publication": "",
+    "publication_year_printed": "",
+    "publication_year_gregorian": "",
+    "publication_year_hijri": "",
+    "publication_year_kurdish": "",
+    "genre": "",
+    "tags": "",
+    "rights_status": "public_domain",
+    "spdx_license": "CC-BY-4.0",
+    "source_collection": "چاپخانەی الحوادث",
+    "source_url": "https://archive.kcac.org/zoom/409/view?page=1&p=separate&tool=info&view=0,0,1733,2480",
+    "physical_condition": "",
+    "missing_pages": "",
+    "notes": ""
+  },
+  "page": {
+    "book_id": "kcac_000409",
+    "page_number_sequence": 1,
+    "page_number_printed": "1",
+    "page_type": "body",
+    "layout_class": "single-column",
+    "reading_direction": "rtl",
+    "language": "ckb-Arab",
+    "script": "sorani-arabic",
+    "era_typography": "letterpress",
+    "scan_resolution_dpi": "",
+    "colour_mode": "colour",
+    "scan_quality": "good",
+    "damage_present": "",
+    "verification_status": "raw",
+    "split": "train",
+    "has_illustrations": false,
+    "has_table": false,
+    "has_marginalia": false,
+    "has_footnote": false,
+    "has_poetry": false,
+    "page_id": "kcac_000409_p0001",
+    "pixel_dimensions": {
+      "width": 1733,
+      "height": 2480
+    },
+    "image_filename": "page_0001.jpg"
+  },
+  "annotations": {
+    "regions": [
+      {
+        "id": "kcac_000409_p0001_r0001",
+        "region_id": "kcac_000409_p0001_r0001",
+        "class": "HeadingH1",
+        "bbox": [
+          922,
+          549.08,
+          579,
+          179.92
+        ],
+        "polygon": [
+          [
+            922,
+            549.08
+          ],
+          [
+            1501,
+            549.08
+          ],
+          [
+            1501,
+            729
+          ],
+          [
+            922,
+            729
+          ]
+        ],
+        "angle_degrees": 0,
+        "confidence": 1,
+        "reading_order": 1,
+        "verification_status": "raw"
+      },
+      {
+        "id": "kcac_000409_p0001_r0002",
+        "region_id": "kcac_000409_p0001_r0002",
+        "class": "Footer",
+        "bbox": [
+          574,
+          2218,
+          730,
+          100
+        ],
+        "polygon": [
+          [
+            574,
+            2218
+          ],
+          [
+            1304,
+            2218
+          ],
+          [
+            1304,
+            2318
+          ],
+          [
+            574,
+            2318
+          ]
+        ],
+        "angle_degrees": 0,
+        "confidence": 1,
+        "reading_order": 1,
+        "verification_status": "raw"
+      },
+      {
+        "id": "kcac_000409_p0001_r0003",
+        "region_id": "kcac_000409_p0001_r0003",
+        "class": "HeadingH1",
+        "bbox": [
+          365.11,
+          734.08,
+          886.19,
+          552.21
+        ],
+        "polygon": [
+          [
+            365.11,
+            734.08
+          ],
+          [
+            1251.3,
+            734.08
+          ],
+          [
+            1251.3,
+            1286.29
+          ],
+          [
+            365.11,
+            1286.29
+          ]
+        ],
+        "angle_degrees": 0,
+        "confidence": 1,
+        "reading_order": 3,
+        "verification_status": "raw"
+      },
+      {
+        "id": "kcac_000409_p0001_r0004",
+        "region_id": "kcac_000409_p0001_r0004",
+        "class": "Figure",
+        "bbox": [
+          882.6,
+          113.8,
+          333.4,
+          222.8
+        ],
+        "polygon": [
+          [
+            882.6,
+            113.8
+          ],
+          [
+            1216,
+            113.8
+          ],
+          [
+            1216,
+            336.6
+          ],
+          [
+            882.6,
+            336.6
+          ]
+        ],
+        "angle_degrees": 0,
+        "confidence": 0.5021,
+        "reading_order": 4,
+        "verification_status": "raw"
+      },
+      {
+        "id": "kcac_000409_p0001_r0005",
+        "region_id": "kcac_000409_p0001_r0005",
+        "class": "Picture",
+        "bbox": [
+          1356.61,
+          143.93,
+          298.18,
+          211.19
+        ],
+        "polygon": [
+          [
+            1356.61,
+            143.93
+          ],
+          [
+            1654.79,
+            143.93
+          ],
+          [
+            1654.79,
+            355.12
+          ],
+          [
+            1356.61,
+            355.12
+          ]
+        ],
+        "angle_degrees": 0,
+        "confidence": 1,
+        "reading_order": 5,
+        "verification_status": "raw"
+      },
+      {
+        "id": "kcac_000409_p0001_r0006",
+        "region_id": "kcac_000409_p0001_r0006",
+        "class": "Picture",
+        "bbox": [
+          1327.19,
+          986.9,
+          319.61,
+          362.85
+        ],
+        "polygon": [
+          [
+            1327.19,
+            986.9
+          ],
+          [
+            1646.8,
+            986.9
+          ],
+          [
+            1646.8,
+            1349.75
+          ],
+          [
+            1327.19,
+            1349.75
+          ]
+        ],
+        "angle_degrees": 0,
+        "confidence": 0.9216,
+        "reading_order": 6,
+        "verification_status": "raw"
+      },
+      {
+        "id": "kcac_000409_p0001_r0007",
+        "region_id": "kcac_000409_p0001_r0007",
+        "class": "PageNumber",
+        "bbox": [
+          204.87,
+          2240.9,
+          90.43,
+          71.03
+        ],
+        "polygon": [
+          [
+            204.87,
+            2240.9
+          ],
+          [
+            295.3,
+            2240.9
+          ],
+          [
+            295.3,
+            2311.93
+          ],
+          [
+            204.87,
+            2311.93
+          ]
+        ],
+        "angle_degrees": 0,
+        "confidence": 1,
+        "reading_order": 7,
+        "verification_status": "raw"
+      },
+      {
+        "id": "kcac_000409_p0001_r0008",
+        "region_id": "kcac_000409_p0001_r0008",
+        "class": "TextRegion",
+        "bbox": [
+          198.55,
+          122.35,
+          1454.93,
+          2225.39
+        ],
+        "polygon": [
+          [
+            198.55,
+            122.35
+          ],
+          [
+            1653.48,
+            122.35
+          ],
+          [
+            1653.48,
+            2347.74
+          ],
+          [
+            198.55,
+            2347.74
+          ]
+        ],
+        "angle_degrees": 0,
+        "confidence": 1,
+        "reading_order": 8,
+        "verification_status": "raw"
+      }
+    ],
+    "lines": [
+      {
+        "id": "kcac_000409_p0001_l0001",
+        "line_id": "kcac_000409_p0001_l0001",
+        "bbox": [
+          358,
+          1396,
+          1138,
+          81
+        ],
+        "polygon": [
+          [
+            358,
+            1396
+          ],
+          [
+            1496,
+            1396
+          ],
+          [
+            1496,
+            1477
+          ],
+          [
+            358,
+            1477
+          ]
+        ],
+        "baseline": [
+          [
+            358,
+            1459.18
+          ],
+          [
+            1496,
+            1459.18
+          ]
+        ],
+        "angle_degrees": 0,
+        "confidence": 1,
+        "reading_order": 1,
+        "transcription": {
+          "raw": "( ئاکرێ ) ڕۆژنامەییەکی مێژوویی‌یە . لە ساڵی ١٩٥٠ دا",
+          "normalised": "( ئاکرێ ) ڕۆژنامەییەکی مێژوویی یە . لە ساڵی ١٩٥٠ دا",
+          "diacritic_stripped": ""
+        },
+        "verification_status": "raw"
+      },
+      {
+        "id": "kcac_000409_p0001_l0002",
+        "line_id": "kcac_000409_p0001_l0002",
+        "bbox": [
+          401,
+          1481,
+          1025,
+          75
+        ],
+        "polygon": [
+          [
+            401,
+            1481
+          ],
+          [
+            1426,
+            1481
+          ],
+          [
+            1426,
+            1556
+          ],
+          [
+            401,
+            1556
+          ]
+        ],
+        "baseline": [
+          [
+            401,
+            1539.5
+          ],
+          [
+            1426,
+            1539.5
+          ]
+        ],
+        "angle_degrees": 0,
+        "confidence": 1,
+        "reading_order": 2,
+        "transcription": {
+          "raw": "نەتەوەی ئاڕاستە دەکرد بۆ ژیانێکی پاکترو چاکترو",
+          "normalised": "نەتەوەی ئاڕاستە دەکرد بۆ ژیانێکی پاکتر و چاکتر و",
+          "diacritic_stripped": ""
+        },
+        "verification_status": "raw"
+      },
+      {
+        "id": "kcac_000409_p0001_l0003",
+        "line_id": "kcac_000409_p0001_l0003",
+        "bbox": [
+          1244,
+          1572,
+          168,
+          61
+        ],
+        "polygon": [
+          [
+            1244,
+            1572
+          ],
+          [
+            1412,
+            1572
+          ],
+          [
+            1412,
+            1633
+          ],
+          [
+            1244,
+            1633
+          ]
+        ],
+        "baseline": [
+          [
+            1244,
+            1619.58
+          ],
+          [
+            1412,
+            1619.58
+          ]
+        ],
+        "angle_degrees": 0,
+        "confidence": 1,
+        "reading_order": 3,
+        "transcription": {
+          "raw": "بڵندتر .",
+          "normalised": "بڵندتر .",
+          "diacritic_stripped": ""
+        },
+        "verification_status": "raw"
+      },
+      {
+        "id": "kcac_000409_p0001_l0004",
+        "line_id": "kcac_000409_p0001_l0004",
+        "bbox": [
+          714,
+          1809,
+          395,
+          73
+        ],
+        "polygon": [
+          [
+            714,
+            1809
+          ],
+          [
+            1109,
+            1809
+          ],
+          [
+            1109,
+            1882
+          ],
+          [
+            714,
+            1882
+          ]
+        ],
+        "baseline": [
+          [
+            714,
+            1865.94
+          ],
+          [
+            1109,
+            1865.94
+          ]
+        ],
+        "angle_degrees": 0,
+        "confidence": 1,
+        "reading_order": 4,
+        "transcription": {
+          "raw": "سەرنوسەرو خاوەنی",
+          "normalised": "سەرنوسەر و خاوەنی",
+          "diacritic_stripped": ""
+        },
+        "verification_status": "raw"
+      },
+      {
+        "id": "kcac_000409_p0001_l0005",
+        "line_id": "kcac_000409_p0001_l0005",
+        "bbox": [
+          736,
+          1912,
+          319,
+          86
+        ],
+        "polygon": [
+          [
+            736,
+            1912
+          ],
+          [
+            1055,
+            1912
+          ],
+          [
+            1055,
+            1998
+          ],
+          [
+            736,
+            1998
+          ]
+        ],
+        "baseline": [
+          [
+            736,
+            1979.08
+          ],
+          [
+            1055,
+            1979.08
+          ]
+        ],
+        "angle_degrees": 0,
+        "confidence": 1,
+        "reading_order": 5,
+        "transcription": {
+          "raw": "شاکر فتاح",
+          "normalised": "شاکر فتاح",
+          "diacritic_stripped": ""
+        },
+        "verification_status": "raw"
+      }
+    ]
+  },
+  "text_lines": [
+    {
+      "id": "kcac_000409_p0001_l0001",
+      "bbox": [
+        358,
+        1396,
+        1138,
+        81
+      ],
+      "polygon": [
+        [
+          358,
+          1396
+        ],
+        [
+          1496,
+          1396
+        ],
+        [
+          1496,
+          1477
+        ],
+        [
+          358,
+          1477
+        ]
+      ],
+      "baseline": [
+        [
+          358,
+          1459.18
+        ],
+        [
+          1496,
+          1459.18
+        ]
+      ],
+      "angle_degrees": 0,
+      "confidence": 1,
+      "reading_order": 1,
+      "text_raw": "( ئاکرێ ) ڕۆژنامەییەکی مێژوویی‌یە . لە ساڵی ١٩٥٠ دا",
+      "text_normalised": "( ئاکرێ ) ڕۆژنامەییەکی مێژوویی یە . لە ساڵی ١٩٥٠ دا",
+      "text_diacritic_stripped": ""
+    },
+    {
+      "id": "kcac_000409_p0001_l0002",
+      "bbox": [
+        401,
+        1481,
+        1025,
+        75
+      ],
+      "polygon": [
+        [
+          401,
+          1481
+        ],
+        [
+          1426,
+          1481
+        ],
+        [
+          1426,
+          1556
+        ],
+        [
+          401,
+          1556
+        ]
+      ],
+      "baseline": [
+        [
+          401,
+          1539.5
+        ],
+        [
+          1426,
+          1539.5
+        ]
+      ],
+      "angle_degrees": 0,
+      "confidence": 1,
+      "reading_order": 2,
+      "text_raw": "نەتەوەی ئاڕاستە دەکرد بۆ ژیانێکی پاکترو چاکترو",
+      "text_normalised": "نەتەوەی ئاڕاستە دەکرد بۆ ژیانێکی پاکتر و چاکتر و",
+      "text_diacritic_stripped": ""
+    },
+    {
+      "id": "kcac_000409_p0001_l0003",
+      "bbox": [
+        1244,
+        1572,
+        168,
+        61
+      ],
+      "polygon": [
+        [
+          1244,
+          1572
+        ],
+        [
+          1412,
+          1572
+        ],
+        [
+          1412,
+          1633
+        ],
+        [
+          1244,
+          1633
+        ]
+      ],
+      "baseline": [
+        [
+          1244,
+          1619.58
+        ],
+        [
+          1412,
+          1619.58
+        ]
+      ],
+      "angle_degrees": 0,
+      "confidence": 1,
+      "reading_order": 3,
+      "text_raw": "بڵندتر .",
+      "text_normalised": "بڵندتر .",
+      "text_diacritic_stripped": ""
+    },
+    {
+      "id": "kcac_000409_p0001_l0004",
+      "bbox": [
+        714,
+        1809,
+        395,
+        73
+      ],
+      "polygon": [
+        [
+          714,
+          1809
+        ],
+        [
+          1109,
+          1809
+        ],
+        [
+          1109,
+          1882
+        ],
+        [
+          714,
+          1882
+        ]
+      ],
+      "baseline": [
+        [
+          714,
+          1865.94
+        ],
+        [
+          1109,
+          1865.94
+        ]
+      ],
+      "angle_degrees": 0,
+      "confidence": 1,
+      "reading_order": 4,
+      "text_raw": "سەرنوسەرو خاوەنی",
+      "text_normalised": "سەرنوسەر و خاوەنی",
+      "text_diacritic_stripped": ""
+    },
+    {
+      "id": "kcac_000409_p0001_l0005",
+      "bbox": [
+        736,
+        1912,
+        319,
+        86
+      ],
+      "polygon": [
+        [
+          736,
+          1912
+        ],
+        [
+          1055,
+          1912
+        ],
+        [
+          1055,
+          1998
+        ],
+        [
+          736,
+          1998
+        ]
+      ],
+      "baseline": [
+        [
+          736,
+          1979.08
+        ],
+        [
+          1055,
+          1979.08
+        ]
+      ],
+      "angle_degrees": 0,
+      "confidence": 1,
+      "reading_order": 5,
+      "text_raw": "شاکر فتاح",
+      "text_normalised": "شاکر فتاح",
+      "text_diacritic_stripped": ""
+    }
+  ],
+  "layout": [
+    {
+      "id": "kcac_000409_p0001_r0001",
+      "bbox": [
+        922,
+        549.08,
+        579,
+        179.92
+      ],
+      "polygon": [
+        [
+          922,
+          549.08
+        ],
+        [
+          1501,
+          549.08
+        ],
+        [
+          1501,
+          729
+        ],
+        [
+          922,
+          729
+        ]
+      ],
+      "label": "HeadingH1",
+      "angle_degrees": 0,
+      "score": 1,
+      "reading_order": 1
+    },
+    {
+      "id": "kcac_000409_p0001_r0002",
+      "bbox": [
+        574,
+        2218,
+        730,
+        100
+      ],
+      "polygon": [
+        [
+          574,
+          2218
+        ],
+        [
+          1304,
+          2218
+        ],
+        [
+          1304,
+          2318
+        ],
+        [
+          574,
+          2318
+        ]
+      ],
+      "label": "Footer",
+      "angle_degrees": 0,
+      "score": 1,
+      "reading_order": 1
+    },
+    {
+      "id": "kcac_000409_p0001_r0003",
+      "bbox": [
+        365.11,
+        734.08,
+        886.19,
+        552.21
+      ],
+      "polygon": [
+        [
+          365.11,
+          734.08
+        ],
+        [
+          1251.3,
+          734.08
+        ],
+        [
+          1251.3,
+          1286.29
+        ],
+        [
+          365.11,
+          1286.29
+        ]
+      ],
+      "label": "HeadingH1",
+      "angle_degrees": 0,
+      "score": 1,
+      "reading_order": 3
+    },
+    {
+      "id": "kcac_000409_p0001_r0004",
+      "bbox": [
+        882.6,
+        113.8,
+        333.4,
+        222.8
+      ],
+      "polygon": [
+        [
+          882.6,
+          113.8
+        ],
+        [
+          1216,
+          113.8
+        ],
+        [
+          1216,
+          336.6
+        ],
+        [
+          882.6,
+          336.6
+        ]
+      ],
+      "label": "Figure",
+      "angle_degrees": 0,
+      "score": 0.5021,
+      "reading_order": 4
+    },
+    {
+      "id": "kcac_000409_p0001_r0005",
+      "bbox": [
+        1356.61,
+        143.93,
+        298.18,
+        211.19
+      ],
+      "polygon": [
+        [
+          1356.61,
+          143.93
+        ],
+        [
+          1654.79,
+          143.93
+        ],
+        [
+          1654.79,
+          355.12
+        ],
+        [
+          1356.61,
+          355.12
+        ]
+      ],
+      "label": "Picture",
+      "angle_degrees": 0,
+      "score": 1,
+      "reading_order": 5
+    },
+    {
+      "id": "kcac_000409_p0001_r0006",
+      "bbox": [
+        1327.19,
+        986.9,
+        319.61,
+        362.85
+      ],
+      "polygon": [
+        [
+          1327.19,
+          986.9
+        ],
+        [
+          1646.8,
+          986.9
+        ],
+        [
+          1646.8,
+          1349.75
+        ],
+        [
+          1327.19,
+          1349.75
+        ]
+      ],
+      "label": "Picture",
+      "angle_degrees": 0,
+      "score": 0.9216,
+      "reading_order": 6
+    },
+    {
+      "id": "kcac_000409_p0001_r0007",
+      "bbox": [
+        204.87,
+        2240.9,
+        90.43,
+        71.03
+      ],
+      "polygon": [
+        [
+          204.87,
+          2240.9
+        ],
+        [
+          295.3,
+          2240.9
+        ],
+        [
+          295.3,
+          2311.93
+        ],
+        [
+          204.87,
+          2311.93
+        ]
+      ],
+      "label": "PageNumber",
+      "angle_degrees": 0,
+      "score": 1,
+      "reading_order": 7
+    },
+    {
+      "id": "kcac_000409_p0001_r0008",
+      "bbox": [
+        198.55,
+        122.35,
+        1454.93,
+        2225.39
+      ],
+      "polygon": [
+        [
+          198.55,
+          122.35
+        ],
+        [
+          1653.48,
+          122.35
+        ],
+        [
+          1653.48,
+          2347.74
+        ],
+        [
+          198.55,
+          2347.74
+        ]
+      ],
+      "label": "TextRegion",
+      "angle_degrees": 0,
+      "score": 1,
+      "reading_order": 8
+    }
+  ]
+}

@@ -1,0 +1,2472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Surya Annotation Editor</title>
+<style>
+  :root {
+    --bg: #0e1116; --panel: #161b22; --panel-2: #1c2128; --border: #30363d;
+    --text: #e6edf3; --muted: #7d8590; --accent: #2f81f7; --accent-2: #1f6feb;
+    --danger: #f85149; --success: #3fb950; --warning: #d29922;
+    --line-color: #3fb950; --layout-color: #f78166; --selected: #ffd60a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); }
+  body { display: flex; flex-direction: column; }
+
+  .topbar { display: flex; align-items: center; gap: 10px; padding: 10px 16px; background: var(--panel); border-bottom: 1px solid var(--border); flex-shrink: 0; }
+  .topbar h1 { font-size: 13px; font-weight: 600; letter-spacing: 0.5px; color: var(--accent); white-space: nowrap; }
+  .topbar .sep { width: 1px; height: 24px; background: var(--border); }
+  .btn { background: var(--panel-2); color: var(--text); border: 1px solid var(--border); padding: 6px 12px; font-size: 12px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-family: inherit; transition: all 0.15s; white-space: nowrap; }
+  .btn:hover { background: #2d333b; border-color: var(--accent); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn.primary { background: var(--accent-2); border-color: var(--accent-2); }
+  .btn.primary:hover { background: var(--accent); }
+  .btn.danger { color: var(--danger); }
+  .btn.danger:hover { background: rgba(248,81,73,0.1); border-color: var(--danger); }
+  .btn.success { color: var(--success); }
+  .btn.success:hover { background: rgba(63,185,80,0.1); border-color: var(--success); }
+  input[type="file"] { display: none; }
+  label.btn { cursor: pointer; }
+
+  .main { display: flex; flex: 1; overflow: hidden; }
+  .file-panel { width: 240px; background: var(--panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; }
+  .file-panel-header { padding: 10px 12px; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 6px; }
+  .file-panel-header .row { display: flex; gap: 6px; }
+  .file-panel-header .row .btn { flex: 1; padding: 5px 8px; font-size: 11px; justify-content: center; }
+  .folder-status { font-size: 10px; color: var(--muted); font-family: 'SF Mono', Consolas, monospace; word-break: break-all; }
+  .folder-status.ok { color: var(--success); }
+  .file-search { padding: 8px 10px; border-bottom: 1px solid var(--border); }
+  .file-search input { width: 100%; }
+  .file-list { flex: 1; overflow-y: auto; }
+  .file-item { padding: 8px 12px; font-size: 11px; cursor: pointer; display: flex; align-items: center; gap: 6px; border-bottom: 1px solid rgba(48,54,61,0.4); font-family: 'SF Mono', Consolas, monospace; transition: background 0.1s; }
+  .file-item:hover { background: var(--panel-2); }
+  .file-item.active { background: rgba(47,129,247,0.18); border-left: 3px solid var(--accent); padding-left: 9px; }
+  .file-item .name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .file-item .badge { font-size: 9px; padding: 1px 5px; border-radius: 3px; flex-shrink: 0; }
+  .file-item .badge.ok { background: rgba(63,185,80,0.2); color: var(--success); }
+  .file-item .badge.miss { background: rgba(248,81,73,0.2); color: var(--danger); }
+  .file-item .badge.dirty { background: rgba(210,153,34,0.25); color: var(--warning); }
+  .file-item .badge.saved { background: rgba(63,185,80,0.15); color: var(--success); }
+  .nav-bar { padding: 8px 10px; border-top: 1px solid var(--border); display: flex; gap: 6px; background: var(--panel-2); }
+  .nav-bar .btn { flex: 1; justify-content: center; }
+  .nav-info { font-size: 10px; color: var(--muted); text-align: center; padding: 4px; font-family: 'SF Mono', Consolas, monospace; }
+
+  .canvas-area { flex: 1; background: #0a0d12; position: relative; overflow: hidden;
+    background-image: linear-gradient(45deg, #14181f 25%, transparent 25%), linear-gradient(-45deg, #14181f 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #14181f 75%), linear-gradient(-45deg, transparent 75%, #14181f 75%);
+    background-size: 20px 20px; background-position: 0 0, 0 10px, 10px -10px, -10px 0px; }
+  #canvas { position: absolute; top: 0; left: 0; cursor: crosshair; }
+
+  .sidebar { width: 380px; background: var(--panel); border-left: 1px solid var(--border); overflow-y: auto; flex-shrink: 0; }
+  .section { border-bottom: 1px solid var(--border); padding: 12px 14px; }
+  .section h3 { font-size: 11px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.8px; }
+  details.section { padding: 0; }
+  details.section summary { list-style: none; cursor: pointer; padding: 12px 14px; border-bottom: 1px solid rgba(48,54,61,0.5); }
+  details.section summary::-webkit-details-marker { display: none; }
+  details.section summary h3 { margin: 0; }
+  details.section[open] summary { border-bottom-color: transparent; }
+  .section-body { padding: 0 14px 12px; }
+
+  .dropzone { position: absolute; inset: 20px; border: 2px dashed var(--border); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; pointer-events: none; transition: all 0.2s; }
+  .dropzone.active { border-color: var(--accent); background: rgba(47,129,247,0.05); }
+  .dropzone.hidden { display: none; }
+  .dropzone .icon { font-size: 48px; opacity: 0.4; }
+  .dropzone p { color: var(--muted); font-size: 14px; max-width: 500px; text-align: center; line-height: 1.7; padding: 0 20px; }
+  .dropzone .hint { font-size: 12px; opacity: 0.7; }
+  .dropzone strong { color: var(--text); }
+  .dropzone code { background: var(--panel-2); padding: 2px 6px; border-radius: 3px; font-size: 11px; }
+
+  .statusbar { display: flex; gap: 12px; align-items: center; padding: 6px 16px; background: var(--panel); border-top: 1px solid var(--border); font-size: 11px; color: var(--muted); font-family: 'SF Mono', Consolas, monospace; flex-shrink: 0; }
+  .status-pill { padding: 2px 8px; border-radius: 4px; background: var(--panel-2); border: 1px solid var(--border); }
+  .status-pill.warn { color: var(--warning); border-color: var(--warning); }
+  .status-pill.success { color: var(--success); border-color: var(--success); }
+
+  .tool-row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tool-btn { background: var(--panel-2); border: 1px solid var(--border); color: var(--text); padding: 8px 10px; border-radius: 6px; cursor: pointer; font-size: 11px; flex: 1; min-width: 60px; font-family: inherit; transition: all 0.15s; }
+  .tool-btn:hover { background: #2d333b; }
+  .tool-btn.active { background: var(--accent-2); border-color: var(--accent-2); color: white; }
+
+  .filter-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .filter-row label { font-size: 12px; flex: 1; }
+  input[type="range"] { flex: 1; }
+  input[type="number"], input[type="text"], select, textarea { background: var(--bg); color: var(--text); border: 1px solid var(--border); padding: 5px 8px; border-radius: 4px; font-size: 12px; font-family: inherit; width: 100%; }
+  textarea { min-height: 58px; resize: vertical; line-height: 1.45; }
+  input:focus, select:focus { outline: none; border-color: var(--accent); }
+  textarea:focus { outline: none; border-color: var(--accent); }
+  .toolbar-select { width: auto; min-width: 142px; }
+  .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .field-grid.one { grid-template-columns: 1fr; }
+  .field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .field label, label.field { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .field input, .field select { min-width: 0; }
+  .flag-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 10px; margin-top: 8px; }
+  .flag-grid label { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text); text-transform: none; letter-spacing: 0; }
+  .id-preview { margin-top: 8px; padding: 7px 8px; border: 1px solid var(--border); border-radius: 6px; background: var(--panel-2); color: var(--muted); font-size: 11px; font-family: 'SF Mono', Consolas, monospace; word-break: break-all; }
+  .issue-list { display: flex; flex-direction: column; gap: 6px; max-height: 150px; overflow-y: auto; }
+  .issue { border: 1px solid var(--border); border-radius: 6px; padding: 6px 8px; font-size: 11px; line-height: 1.35; }
+  .issue.ok { color: var(--success); border-color: rgba(63,185,80,0.45); }
+  .issue.warn { color: var(--warning); border-color: rgba(210,153,34,0.45); }
+  .issue.error { color: var(--danger); border-color: rgba(248,81,73,0.45); }
+
+  .ann-list { max-height: 220px; overflow-y: auto; border: 1px solid var(--border); border-radius: 6px; }
+  .ann-item { padding: 6px 10px; border-bottom: 1px solid var(--border); font-size: 11px; display: flex; align-items: center; gap: 6px; cursor: pointer; font-family: 'SF Mono', Consolas, monospace; }
+  .ann-item:last-child { border-bottom: none; }
+  .ann-item:hover { background: var(--panel-2); }
+  .ann-item.selected { background: rgba(255,214,10,0.15); border-left: 3px solid var(--selected); padding-left: 7px; }
+  .ann-item .swatch { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .ann-item .label { flex: 1; }
+  .ann-item .conf { color: var(--muted); }
+
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .stat { background: var(--panel-2); padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border); }
+  .stat .label { font-size: 10px; color: var(--muted); text-transform: uppercase; }
+  .stat .value { font-size: 16px; font-weight: 600; margin-top: 2px; }
+
+  .class-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .class-btn { padding: 6px; font-size: 11px; border-radius: 4px; border: 1px solid var(--border); background: var(--panel-2); color: var(--text); cursor: pointer; font-family: inherit; }
+  .class-btn:hover { background: #2d333b; }
+
+  .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--panel-2); border: 1px solid var(--border); padding: 10px 18px; border-radius: 8px; font-size: 13px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); z-index: 1000; opacity: 0; transition: opacity 0.2s; pointer-events: none; }
+  .toast.show { opacity: 1; }
+  .toast.success { border-color: var(--success); color: var(--success); }
+  .toast.error { border-color: var(--danger); color: var(--danger); }
+  .toast.warn { border-color: var(--warning); color: var(--warning); }
+
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 999; }
+  .modal-overlay.show { display: flex; }
+  .modal { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 24px; max-width: 540px; width: 90%; max-height: 85vh; overflow-y: auto; }
+  .modal h2 { font-size: 16px; margin-bottom: 16px; }
+  .modal h3 { font-size: 12px; color: var(--muted); margin: 16px 0 8px; text-transform: uppercase; }
+  .shortcut-list { display: grid; grid-template-columns: auto 1fr; gap: 6px 16px; font-size: 12px; }
+  .shortcut-list kbd { background: var(--bg); border: 1px solid var(--border); padding: 2px 7px; border-radius: 4px; font-family: 'SF Mono', Consolas, monospace; font-size: 11px; }
+  .modal .close-btn { margin-top: 16px; }
+  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
+
+  .smart-help { position: fixed; z-index: 1200; width: min(320px, calc(100vw - 24px)); background: #10151d; color: var(--text); border: 1px solid var(--accent); border-radius: 8px; padding: 10px 12px; font-size: 12px; line-height: 1.45; box-shadow: 0 10px 28px rgba(0,0,0,0.55); display: none; }
+  .smart-help.show { display: block; }
+  .smart-help .more { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; }
+  .smart-help button { font-size: 11px; padding: 4px 8px; }
+
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+  .autosave-toggle { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted); }
+  .autosave-toggle input { margin: 0; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <h1>KCAC WORKBENCH</h1>
+  <div class="sep"></div>
+  <button class="btn primary" id="openImageFolderBtn" title="Open folder of images">📁 Image Folder</button>
+  <button class="btn primary" id="openJsonFolderBtn" title="Open folder of JSON files (writable)">📁 JSON Folder</button>
+  <div class="sep"></div>
+  <label class="btn" for="loadImage">Single Image</label>
+  <input type="file" id="loadImage" accept="image/*">
+  <label class="btn" for="loadJson">Single JSON</label>
+  <input type="file" id="loadJson" accept=".json">
+  <div class="sep"></div>
+  <button class="btn success" id="saveJsonBtn" title="Save KCAC JSON (Ctrl+S)">💾 Save</button>
+  <select id="exportFormat" class="toolbar-select" title="Standards export format">
+    <option value="bundle">Standards bundle</option>
+    <option value="page">PAGE XML</option>
+    <option value="alto">ALTO XML</option>
+    <option value="tei">TEI P5</option>
+    <option value="hf">HF JSONL</option>
+    <option value="mets">METS/MODS</option>
+    <option value="iiif">IIIF 3.0</option>
+    <option value="dataset-card">Dataset Card</option>
+    <option value="datasheet">Datasheet</option>
+  </select>
+  <button class="btn" id="exportStdBtn">Export</button>
+  <button class="btn" id="exportYoloBtn">📦 YOLO</button>
+  <div class="sep"></div>
+  <button class="btn" id="undoBtn" title="Undo (Ctrl+Z)">↶</button>
+  <button class="btn" id="redoBtn" title="Redo (Ctrl+Y)">↷</button>
+  <div style="flex:1"></div>
+  <label class="autosave-toggle"><input type="checkbox" id="autosaveChk" checked> Auto-save on switch</label>
+  <button class="btn" id="helpBtn">? Help</button>
+</div>
+
+<div class="main">
+  <div class="file-panel">
+    <div class="file-panel-header">
+      <div class="row">
+        <button class="btn" id="openImageFolderBtn2">📁 Images</button>
+        <button class="btn" id="openJsonFolderBtn2">📁 JSONs</button>
+      </div>
+      <div class="folder-status" id="imgFolderStatus">No image folder</div>
+      <div class="folder-status" id="jsonFolderStatus">No JSON folder</div>
+    </div>
+    <div class="file-search">
+      <input type="text" id="fileSearch" placeholder="Filter files...">
+    </div>
+    <div class="file-list" id="fileList">
+      <div style="padding:20px; text-align:center; color:var(--muted); font-size:11px;">
+        No files loaded.<br>Click <strong>Image Folder</strong> above.
+      </div>
+    </div>
+    <div class="nav-info" id="navInfo">— / —</div>
+    <div class="nav-bar">
+      <button class="btn" id="prevBtn" title="Previous (PageUp)">◀ Prev</button>
+      <button class="btn" id="nextBtn" title="Next (PageDown)">Next ▶</button>
+    </div>
+  </div>
+
+  <div class="canvas-area" id="canvasArea">
+    <canvas id="canvas"></canvas>
+    <div class="dropzone" id="dropzone">
+      <div class="icon">📁</div>
+      <p><strong>Open an image folder + JSON folder to start.</strong><br>
+        <span class="hint">Filenames are auto-paired: <code>page_009.jpg</code> ↔ <code>page_009.json</code>.<br>KCAC IDs, PAGE XML, ALTO, TEI, IIIF, METS, and HF JSONL export from the same corrected page.</span></p>
+      <p class="hint" id="apiSupportHint" style="font-size:11px"></p>
+    </div>
+  </div>
+
+  <div class="sidebar">
+    <div class="section">
+      <h3>Tools</h3>
+      <div class="tool-row">
+        <button class="tool-btn active" data-tool="select">▭ Select</button>
+        <button class="tool-btn" data-tool="draw-line">＋ Line</button>
+        <button class="tool-btn" data-tool="draw-layout">＋ Layout</button>
+      </div>
+    </div>
+    <div class="section">
+      <h3>Visibility</h3>
+      <div class="filter-row">
+        <input type="checkbox" id="showLines" checked>
+        <label for="showLines"><span style="color:var(--line-color)">●</span> Text Lines</label>
+        <span id="lineCount" class="status-pill">0</span>
+      </div>
+      <div class="filter-row">
+        <input type="checkbox" id="showLayout" checked>
+        <label for="showLayout"><span style="color:var(--layout-color)">●</span> Layout</label>
+        <span id="layoutCount" class="status-pill">0</span>
+      </div>
+      <div class="filter-row">
+        <input type="checkbox" id="showLabels" checked>
+        <label for="showLabels">Show labels</label>
+      </div>
+      <div class="filter-row" style="margin-top:8px">
+        <label>Min conf:</label>
+        <input type="range" id="confThreshold" min="0" max="1" step="0.01" value="0">
+        <span id="confValue" style="font-size:11px; min-width:30px; text-align:right">0.00</span>
+      </div>
+    </div>
+    <details class="section" open>
+      <summary><h3>KCAC Page</h3></summary>
+      <div class="section-body">
+        <div class="field-grid">
+          <label class="field">Book ID<input type="text" id="bookIdInput" data-meta="page" data-key="book_id" placeholder="kcac_000152"></label>
+          <label class="field">Page seq<input type="number" id="pageSeqInput" data-meta="page" data-key="page_number_sequence" min="1" step="1"></label>
+          <label class="field">Printed page<input type="text" id="pagePrintedInput" data-meta="page" data-key="page_number_printed"></label>
+          <label class="field">Split<select id="splitInput" data-meta="page" data-key="split">
+            <option value="train">train</option>
+            <option value="val">val</option>
+            <option value="test_general">test_general</option>
+            <option value="test_historical_hard">test_historical_hard</option>
+            <option value="test_low_quality_scans">test_low_quality_scans</option>
+            <option value="test_poetry_layout">test_poetry_layout</option>
+            <option value="test_multi_column">test_multi_column</option>
+            <option value="test_mixed_language">test_mixed_language</option>
+            <option value="test_long_tail_glyphs">test_long_tail_glyphs</option>
+          </select></label>
+          <label class="field">Page type<select id="pageTypeInput" data-meta="page" data-key="page_type">
+            <option value="cover">cover</option>
+            <option value="title">title</option>
+            <option value="toc">toc</option>
+            <option value="body">body</option>
+            <option value="plate">plate</option>
+            <option value="blank">blank</option>
+            <option value="advert">advert</option>
+            <option value="colophon">colophon</option>
+            <option value="index">index</option>
+          </select></label>
+          <label class="field">Layout<select id="layoutClassInput" data-meta="page" data-key="layout_class">
+            <option value="single-column">single-column</option>
+            <option value="two-column">two-column</option>
+            <option value="three-column">three-column</option>
+            <option value="dictionary">dictionary</option>
+            <option value="poetry-centred">poetry-centred</option>
+          </select></label>
+          <label class="field">Language<select id="languageInput" data-meta="page" data-key="language">
+            <option value="ckb-Arab">ckb-Arab</option>
+            <option value="kmr-Latn">kmr-Latn</option>
+            <option value="hac-Arab">hac-Arab</option>
+            <option value="mixed">mixed</option>
+          </select></label>
+          <label class="field">Direction<select id="readingDirectionInput" data-meta="page" data-key="reading_direction">
+            <option value="rtl">rtl</option>
+            <option value="ltr">ltr</option>
+          </select></label>
+          <label class="field">Script<select id="scriptInput" data-meta="page" data-key="script">
+            <option value="sorani-arabic">sorani-arabic</option>
+            <option value="kurmanji-latin">kurmanji-latin</option>
+            <option value="hawrami">hawrami</option>
+            <option value="mixed">mixed</option>
+          </select></label>
+          <label class="field">Typography<select id="typographyInput" data-meta="page" data-key="era_typography">
+            <option value="typewriter">typewriter</option>
+            <option value="letterpress">letterpress</option>
+            <option value="offset">offset</option>
+            <option value="digital">digital</option>
+          </select></label>
+          <label class="field">Scan quality<select id="scanQualityInput" data-meta="page" data-key="scan_quality">
+            <option value="pristine">pristine</option>
+            <option value="good">good</option>
+            <option value="fair">fair</option>
+            <option value="poor">poor</option>
+          </select></label>
+          <label class="field">DPI<input type="number" id="dpiInput" data-meta="page" data-key="scan_resolution_dpi" min="0" step="1"></label>
+          <label class="field">Colour<select id="colourModeInput" data-meta="page" data-key="colour_mode">
+            <option value="colour">colour</option>
+            <option value="greyscale">greyscale</option>
+            <option value="bitonal">bitonal</option>
+          </select></label>
+          <label class="field">Damage<input type="text" id="damageInput" data-meta="page" data-key="damage_present" placeholder="foxing, tearing"></label>
+          <label class="field">Verification<select id="verificationInput" data-meta="page" data-key="verification_status">
+            <option value="raw">raw</option>
+            <option value="ocr_generated">ocr_generated</option>
+            <option value="single_verified">single_verified</option>
+            <option value="double_verified">double_verified</option>
+            <option value="adjudicated">adjudicated</option>
+            <option value="gold">gold</option>
+          </select></label>
+        </div>
+        <div class="flag-grid">
+          <label><input type="checkbox" id="hasIllustrationsInput" data-meta="page" data-key="has_illustrations"> illustrations</label>
+          <label><input type="checkbox" id="hasTableInput" data-meta="page" data-key="has_table"> table</label>
+          <label><input type="checkbox" id="hasMarginaliaInput" data-meta="page" data-key="has_marginalia"> marginalia</label>
+          <label><input type="checkbox" id="hasFootnoteInput" data-meta="page" data-key="has_footnote"> footnote</label>
+          <label><input type="checkbox" id="hasPoetryInput" data-meta="page" data-key="has_poetry"> poetry</label>
+        </div>
+        <div class="id-preview" id="stableIdPreview">Page ID: -</div>
+      </div>
+    </details>
+    <details class="section">
+      <summary><h3>Catalog</h3></summary>
+      <div class="section-body">
+        <div class="field-grid one">
+          <label class="field">Title original<input type="text" id="titleOriginalInput" data-meta="book" data-key="title_original"></label>
+          <label class="field">Title normalised<input type="text" id="titleNormalisedInput" data-meta="book" data-key="title_normalised"></label>
+          <label class="field">Authors<input type="text" id="authorsInput" data-meta="book" data-key="authors"></label>
+        </div>
+        <div class="field-grid" style="margin-top:8px">
+          <label class="field">Publisher<input type="text" id="publisherInput" data-meta="book" data-key="publisher"></label>
+          <label class="field">Place<input type="text" id="placeInput" data-meta="book" data-key="place_of_publication"></label>
+          <label class="field">Year printed<input type="text" id="yearPrintedInput" data-meta="book" data-key="publication_year_printed"></label>
+          <label class="field">Year gregorian<input type="number" id="yearGregorianInput" data-meta="book" data-key="publication_year_gregorian" min="0" step="1"></label>
+          <label class="field">Genre<input type="text" id="genreInput" data-meta="book" data-key="genre"></label>
+          <label class="field">Rights<select id="rightsInput" data-meta="book" data-key="rights_status">
+            <option value="unknown">unknown</option>
+            <option value="public_domain">public_domain</option>
+            <option value="permission_granted">permission_granted</option>
+            <option value="copyrighted">copyrighted</option>
+          </select></label>
+          <label class="field">SPDX<select id="spdxInput" data-meta="book" data-key="spdx_license">
+            <option value="NOASSERTION">NOASSERTION</option>
+            <option value="CC-BY-4.0">CC-BY-4.0</option>
+            <option value="CC-BY-SA-4.0">CC-BY-SA-4.0</option>
+            <option value="CC0-1.0">CC0-1.0</option>
+            <option value="LicenseRef-KCAC-Permission">LicenseRef-KCAC-Permission</option>
+          </select></label>
+          <label class="field">Source<input type="text" id="sourceCollectionInput" data-meta="book" data-key="source_collection"></label>
+          <label class="field">Source URL<input type="text" id="sourceUrlInput" data-meta="book" data-key="source_url"></label>
+        </div>
+        <button class="btn" id="applyBookDefaultsBtn" style="width:100%; justify-content:center; margin-top:8px">Apply Catalog To Folder</button>
+      </div>
+    </details>
+    <div class="section">
+      <h3>Selection (<span id="selCount">0</span>)</h3>
+      <div class="tool-row" style="margin-bottom:8px">
+        <button class="btn danger" id="deleteBtn" style="flex:1">🗑 Del</button>
+        <button class="btn" id="selectAllBtn" style="flex:1">All</button>
+        <button class="btn" id="deselectBtn" style="flex:1">None</button>
+      </div>
+      <div id="selectionEditor" style="display:none">
+        <div id="singleSelectionFields" style="display:none">
+          <div class="field-grid">
+            <label class="field">KCAC ID<input type="text" id="selectedStableId" readonly></label>
+            <label class="field">Reading order<input type="number" id="readingOrderInput" min="1" step="1"></label>
+            <label class="field">Accuracy<input type="number" id="annConfidenceInput" min="0" max="1" step="0.0001"></label>
+            <label class="field">Rotation deg<input type="number" id="rotationInput" min="-180" max="180" step="0.1"></label>
+            <label class="field">Kind<input type="text" id="annKindInput" readonly></label>
+          </div>
+          <div class="field-grid one" style="margin-top:8px">
+            <label class="field">Raw transcription<textarea id="rawTextInput" dir="auto"></textarea></label>
+            <label class="field">Normalised<textarea id="normTextInput" dir="auto"></textarea></label>
+            <label class="field">Diacritic stripped<textarea id="plainTextInput" dir="auto"></textarea></label>
+          </div>
+        </div>
+        <h3 style="margin-top:8px">Change Class →</h3>
+        <div class="class-grid">
+          <button class="class-btn" data-class="TextLine">→ TextLine</button>
+          <button class="class-btn" data-class="TextRegion">→ TextRegion</button>
+          <button class="class-btn" data-class="HeadingH1">→ Heading H1</button>
+          <button class="class-btn" data-class="HeadingH2">→ Heading H2</button>
+          <button class="class-btn" data-class="HeadingH3">→ Heading H3</button>
+          <button class="class-btn" data-class="Caption">→ Caption</button>
+          <button class="class-btn" data-class="Footnote">→ Footnote</button>
+          <button class="class-btn" data-class="PageNumber">→ PageNumber</button>
+          <button class="class-btn" data-class="Header">→ Header</button>
+          <button class="class-btn" data-class="Footer">→ Footer</button>
+          <button class="class-btn" data-class="Marginalia">→ Marginalia</button>
+          <button class="class-btn" data-class="Illustration">→ Illustration</button>
+          <button class="class-btn" data-class="Figure">→ Figure</button>
+          <button class="class-btn" data-class="Table">→ Table</button>
+          <button class="class-btn" data-class="DecorativeElement">→ Decorative</button>
+          <button class="class-btn" data-class="Advertisement">→ Advert</button>
+          <button class="class-btn" data-class="Signature">→ Signature</button>
+          <button class="class-btn" data-class="Stamp">→ Stamp</button>
+          <button class="class-btn" data-class="MathRegion">→ MathRegion</button>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <h3>Bulk</h3>
+      <div class="tool-row">
+        <button class="btn" id="deleteLowConfBtn" style="flex:1">Del < threshold</button>
+        <button class="btn" id="invertBtn" style="flex:1">Invert</button>
+      </div>
+    </div>
+    <div class="section">
+      <h3>Validation</h3>
+      <div class="issue-list" id="qcList">
+        <div class="issue warn">Not checked</div>
+      </div>
+      <button class="btn" id="runQcBtn" style="width:100%; justify-content:center; margin-top:8px">Check Page</button>
+    </div>
+    <div class="section">
+      <h3>Stats</h3>
+      <div class="stat-grid">
+        <div class="stat"><div class="label">Image</div><div class="value" id="statImg" style="font-size:11px; word-break:break-all">—</div></div>
+        <div class="stat"><div class="label">Size</div><div class="value" id="statSize" style="font-size:11px">—</div></div>
+        <div class="stat"><div class="label">Lines</div><div class="value" id="statLines">0</div></div>
+        <div class="stat"><div class="label">Layout</div><div class="value" id="statLayout">0</div></div>
+      </div>
+    </div>
+    <div class="section">
+      <h3>Annotations</h3>
+      <div class="ann-list" id="annList"></div>
+    </div>
+  </div>
+</div>
+
+<div class="statusbar">
+  <span id="statusMode">Mode: Select</span>
+  <span class="status-pill" id="statusZoom">100%</span>
+  <span class="status-pill" id="statusCoords">— , —</span>
+  <span class="status-pill" id="statusDirty"></span>
+  <div style="flex:1"></div>
+  <span id="statusHint" class="status-pill">PageUp/PageDown to navigate · Auto-save on switch</span>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="modal-overlay" id="helpModal">
+  <div class="modal">
+    <h2>⌨ KCAC Annotation Workbench</h2>
+    <h3>Folder Workflow</h3>
+    <ol style="font-size:12px; line-height:1.7; padding-left:20px;">
+      <li>Click <strong>📁 Image Folder</strong> → pick the folder with all your <code>.jpg/.png</code> files.</li>
+      <li>Click <strong>📁 JSON Folder</strong> → pick the folder with Surya or KCAC <code>.json</code> output.</li>
+      <li>Files auto-pair by name (<code>page_009.jpg</code> ↔ <code>page_009.json</code>).</li>
+      <li>Click any image in the left list. Edit boxes, page metadata, verification status, and transcriptions. Click next image → previous edits auto-save.</li>
+      <li>The JSON folder needs <strong>read-write</strong> permission (browser will prompt).</li>
+    </ol>
+    <h3>KCAC Exports</h3>
+    <p style="font-size:12px; line-height:1.6; color:var(--muted)">Save keeps a KCAC JSON record with legacy <code>text_lines</code> and <code>layout</code> arrays. Export creates PAGE XML, ALTO XML, TEI P5, METS/MODS, IIIF 3.0, HuggingFace JSONL, Dataset Card, and Datasheet files.</p>
+    <h3>Shortcuts</h3>
+    <div class="shortcut-list">
+      <kbd>PageDown / PageUp</kbd><span>Next / previous file</span>
+      <kbd>Ctrl + S</kbd><span>Save current file</span>
+      <kbd>V / L / R</kbd><span>Select / draw-line / draw-layout</span>
+      <kbd>Del / Backspace</kbd><span>Delete selected</span>
+      <kbd>Ctrl + A</kbd><span>Select all</span>
+      <kbd>Ctrl + Z / Y</kbd><span>Undo / Redo</span>
+      <kbd>Esc</kbd><span>Deselect</span>
+      <kbd>Shift + Click</kbd><span>Add to selection</span>
+      <kbd>Drag empty area</kbd><span>Marquee select</span>
+      <kbd>Mouse wheel</kbd><span>Zoom</span>
+      <kbd>Space + drag</kbd><span>Pan canvas</span>
+      <kbd>Arrow keys</kbd><span>Nudge selected (Shift = 10px)</span>
+      <kbd>[ / ]</kbd><span>Rotate selected (Shift = 10deg)</span>
+    </div>
+    <h3>Browser Support</h3>
+    <p style="font-size:11px; color:var(--muted)">Folder auto-save needs the File System Access API — works in Chrome, Edge, Brave, Opera. In Firefox/Safari you can still load files but saves will download instead.</p>
+    <button class="btn primary close-btn" onclick="document.getElementById('helpModal').classList.remove('show')">Close</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="bookSetupModal">
+  <div class="modal">
+    <h2>Book Setup For This Folder</h2>
+    <p style="font-size:12px; line-height:1.6; color:var(--muted)">These values become the default catalog record for every image in the folder. Page sequence increases automatically by image order.</p>
+    <div class="field-grid" style="margin-top:12px">
+      <label class="field">Book ID<input type="text" id="setupBookId" placeholder="kcac_000152"></label>
+      <label class="field">Start page<input type="number" id="setupStartPage" min="1" step="1" value="1"></label>
+      <label class="field">Title<input type="text" id="setupTitle"></label>
+      <label class="field">Author<input type="text" id="setupAuthors"></label>
+      <label class="field">Rights<select id="setupRights">
+        <option value="unknown">unknown</option>
+        <option value="public_domain">public_domain</option>
+        <option value="permission_granted">permission_granted</option>
+        <option value="copyrighted">copyrighted</option>
+      </select></label>
+      <label class="field">SPDX<select id="setupSpdx">
+        <option value="NOASSERTION">NOASSERTION</option>
+        <option value="CC-BY-4.0">CC-BY-4.0</option>
+        <option value="CC-BY-SA-4.0">CC-BY-SA-4.0</option>
+        <option value="CC0-1.0">CC0-1.0</option>
+        <option value="LicenseRef-KCAC-Permission">LicenseRef-KCAC-Permission</option>
+      </select></label>
+      <label class="field">Source collection<input type="text" id="setupSource"></label>
+      <label class="field">Source URL<input type="text" id="setupSourceUrl"></label>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" id="bookSetupLaterBtn">Later</button>
+      <button class="btn primary" id="bookSetupApplyBtn">Apply To Folder</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="infoModal">
+  <div class="modal">
+    <h2 id="infoModalTitle">More Info</h2>
+    <p id="infoModalText" style="font-size:12px; line-height:1.7; color:var(--muted)"></p>
+    <button class="btn primary close-btn" id="infoModalCloseBtn">Close</button>
+  </div>
+</div>
+
+<div class="smart-help" id="smartHelp">
+  <div id="smartHelpText"></div>
+  <div class="more"><button class="btn" id="smartHelpMoreBtn">More info</button></div>
+</div>
+
+<script>
+const SCHEMA_NAME = 'kcac_document_understanding_annotation';
+const SCHEMA_VERSION = '0.1';
+const STANDARDS = ['PAGE XML', 'ALTO XML', 'METS/MODS', 'TEI P5', 'IIIF Presentation 3.0', 'HuggingFace datasets', 'BCP 47', 'SPDX', 'Datasheet for Datasets'];
+const PUBLIC_VERIFICATION = new Set(['single_verified', 'double_verified', 'adjudicated', 'gold']);
+const OLD_LABEL_MAP = {
+  Text: 'TextRegion',
+  Title: 'HeadingH1',
+  SectionHeader: 'HeadingH2',
+  PageHeader: 'Header',
+  PageFooter: 'Footer',
+  ListItem: 'TextRegion',
+  Formula: 'MathRegion',
+  text_line: 'TextLine'
+};
+
+function defaultPageMeta() {
+  return {
+    book_id: 'kcac_000000',
+    page_number_sequence: 1,
+    page_number_printed: '',
+    page_type: 'body',
+    layout_class: 'single-column',
+    reading_direction: 'rtl',
+    language: 'ckb-Arab',
+    script: 'sorani-arabic',
+    era_typography: 'letterpress',
+    scan_resolution_dpi: '',
+    colour_mode: 'colour',
+    scan_quality: 'good',
+    damage_present: '',
+    verification_status: 'raw',
+    split: 'train',
+    has_illustrations: false,
+    has_table: false,
+    has_marginalia: false,
+    has_footnote: false,
+    has_poetry: false
+  };
+}
+
+function defaultBookMeta() {
+  return {
+    title_original: '',
+    title_normalised: '',
+    authors: '',
+    authors_normalised: '',
+    editor: '',
+    compiler: '',
+    translator: '',
+    publisher: '',
+    place_of_publication: '',
+    publication_year_printed: '',
+    publication_year_gregorian: '',
+    publication_year_hijri: '',
+    publication_year_kurdish: '',
+    genre: '',
+    tags: '',
+    rights_status: 'unknown',
+    spdx_license: 'NOASSERTION',
+    source_collection: '',
+    source_url: '',
+    physical_condition: '',
+    missing_pages: '',
+    notes: ''
+  };
+}
+
+const state = {
+  image: null, imageName: '', jsonData: null, annotations: [],
+  pageMeta: defaultPageMeta(), bookMeta: defaultBookMeta(), validationIssues: [],
+  selectedIds: new Set(), hoverIds: new Set(), tool: 'select',
+  zoom: 1, panX: 0, panY: 0,
+  isPanning: false, isDragging: false, isDrawing: false, isResizing: false, isRotating: false,
+  resizeHandle: null, isMarquee: false, marqueeStart: null, marqueeEnd: null,
+  drawStart: null, dragStart: null, dragOrigBboxes: null,
+  history: [], historyIdx: -1,
+  showLines: true, showLayout: true, showLabels: true, confThreshold: 0,
+  nextId: 1, spaceDown: false, curMouse: null,
+  imageDirHandle: null, jsonDirHandle: null,
+  imageFiles: [], jsonFiles: new Map(),
+  folderDefaults: { active: false, folderName: '', bookId: 'kcac_000000', startPage: 1, bookMeta: defaultBookMeta() },
+  currentIndex: -1, currentJsonHandle: null, currentJsonName: null,
+  dirty: false, savedSet: new Set(), fileFilter: '',
+};
+
+const FS_API = !!window.showDirectoryPicker;
+
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const canvasArea = document.getElementById('canvasArea');
+
+function resizeCanvas() { canvas.width = canvasArea.clientWidth; canvas.height = canvasArea.clientHeight; draw(); }
+window.addEventListener('resize', resizeCanvas);
+
+document.getElementById('apiSupportHint').textContent = FS_API
+  ? '✓ Full folder support available. Browser will ask for write permission to your JSON folder.'
+  : '⚠ Browser does not support direct folder writes. Use Chrome / Edge / Brave for full functionality.';
+
+function screenToImage(sx, sy) { return { x: (sx - state.panX) / state.zoom, y: (sy - state.panY) / state.zoom }; }
+function imageToScreen(ix, iy) { return { x: ix * state.zoom + state.panX, y: iy * state.zoom + state.panY }; }
+function basenameNoExt(name) { return name.replace(/\.[^.]+$/, ''); }
+function getMatchingJson(imageName) { return state.jsonFiles.get(basenameNoExt(imageName)); }
+function pad(num, width) { return String(Math.max(0, parseInt(num, 10) || 0)).padStart(width, '0'); }
+function round2(v) { return Math.round((Number(v) || 0) * 100) / 100; }
+function round4(v) { return Math.round((Number(v) || 0) * 10000) / 10000; }
+function escapeXml(v) {
+  return String(v ?? '').replace(/[<>&"']/g, ch => ({ '<':'&lt;', '>':'&gt;', '&':'&amp;', '"':'&quot;', "'":'&apos;' }[ch]));
+}
+function normalizeClass(label) { return OLD_LABEL_MAP[label] || label || 'TextRegion'; }
+function isLineClass(label) { return normalizeClass(label) === 'TextLine'; }
+function buildPageId() {
+  const bookId = (state.pageMeta.book_id || 'kcac_000000').trim() || 'kcac_000000';
+  return `${bookId}_p${pad(state.pageMeta.page_number_sequence, 4)}`;
+}
+function bboxToPolygon(bbox) {
+  const [x, y, w, h] = bbox.map(Number);
+  return [[x, y], [x + w, y], [x + w, y + h], [x, y + h]].map(p => p.map(round2));
+}
+function bboxToBaseline(bbox) {
+  const [x, y, w, h] = bbox.map(Number);
+  const by = y + h * 0.78;
+  return [[x, by], [x + w, by]].map(p => p.map(round2));
+}
+function polygonToBbox(points) {
+  if (!Array.isArray(points) || !points.length) return null;
+  const xs = [], ys = [];
+  for (const p of points) {
+    const x = Array.isArray(p) ? p[0] : p.x;
+    const y = Array.isArray(p) ? p[1] : p.y;
+    if (Number.isFinite(Number(x)) && Number.isFinite(Number(y))) { xs.push(Number(x)); ys.push(Number(y)); }
+  }
+  if (!xs.length) return null;
+  const minX = Math.min(...xs), maxX = Math.max(...xs), minY = Math.min(...ys), maxY = Math.max(...ys);
+  return [minX, minY, maxX - minX, maxY - minY];
+}
+function readBbox(item) {
+  return [...(item.bbox || item.bounding_box || polygonToBbox(item.polygon) || [0, 0, 1, 1])];
+}
+function pointsString(points) { return points.map(p => `${round2(p[0])},${round2(p[1])}`).join(' '); }
+function readingOrderValue(ann) {
+  return Number.isFinite(parseInt(ann.readingOrder, 10)) ? parseInt(ann.readingOrder, 10) : null;
+}
+function sortAnnotations(items) {
+  return [...items].sort((a, b) => {
+    const roA = readingOrderValue(a), roB = readingOrderValue(b);
+    if (roA !== null && roB !== null && roA !== roB) return roA - roB;
+    if (roA !== null && roB === null) return -1;
+    if (roA === null && roB !== null) return 1;
+    return (a.bbox[1] - b.bbox[1]) || (a.bbox[0] - b.bbox[0]) || (a.id - b.id);
+  });
+}
+function annotationsByType(type) { return sortAnnotations(state.annotations.filter(a => a.type === type)); }
+function ordinalFor(ann) {
+  const group = annotationsByType(ann.type);
+  return group.findIndex(a => a.id === ann.id) + 1;
+}
+function stableAnnotationId(ann) {
+  const prefix = ann.type === 'line' ? 'l' : 'r';
+  return `${buildPageId()}_${prefix}${pad(ordinalFor(ann), 4)}`;
+}
+function nextReadingOrder(type) {
+  const values = state.annotations.filter(a => a.type === type).map(readingOrderValue).filter(v => v !== null);
+  return values.length ? Math.max(...values) + 1 : state.annotations.filter(a => a.type === type).length + 1;
+}
+function normalizeAngle(deg) {
+  let a = Number(deg) || 0;
+  while (a > 180) a -= 360;
+  while (a <= -180) a += 360;
+  return Math.round(a * 10) / 10;
+}
+function annAngle(ann) { return normalizeAngle(ann.angle ?? ann.rotation ?? ann.angle_degrees ?? 0); }
+function rotatePointLocal(x, y, angleDeg) {
+  const r = angleDeg * Math.PI / 180;
+  const c = Math.cos(r), s = Math.sin(r);
+  return { x: x * c - y * s, y: x * s + y * c };
+}
+function annCenter(ann) {
+  const [x, y, w, h] = ann.bbox.map(Number);
+  return { x: x + w / 2, y: y + h / 2 };
+}
+function annPolygon(ann) {
+  const [x, y, w, h] = ann.bbox.map(Number);
+  const cx = x + w / 2, cy = y + h / 2, angle = annAngle(ann);
+  return [[-w/2, -h/2], [w/2, -h/2], [w/2, h/2], [-w/2, h/2]]
+    .map(([px, py]) => {
+      const r = rotatePointLocal(px, py, angle);
+      return [round2(cx + r.x), round2(cy + r.y)];
+    });
+}
+function annBaseline(ann) {
+  const [x, y, w, h] = ann.bbox.map(Number);
+  const cx = x + w / 2, cy = y + h / 2, angle = annAngle(ann), by = h * 0.28;
+  return [[-w / 2, by], [w / 2, by]].map(([px, py]) => {
+    const r = rotatePointLocal(px, py, angle);
+    return [round2(cx + r.x), round2(cy + r.y)];
+  });
+}
+function screenVectorToLocal(dxScreen, dyScreen, angleDeg) {
+  return rotatePointLocal(dxScreen / state.zoom, dyScreen / state.zoom, -angleDeg);
+}
+function localVectorToImage(dxLocal, dyLocal, angleDeg) {
+  return rotatePointLocal(dxLocal, dyLocal, angleDeg);
+}
+function screenPointToAnnLocal(sx, sy, ann) {
+  const img = screenToImage(sx, sy);
+  const c = annCenter(ann);
+  return rotatePointLocal(img.x - c.x, img.y - c.y, -annAngle(ann));
+}
+function markAnnotationEdited(ann, opts = {}) {
+  if (!ann) return;
+  if (!opts.keepConfidence) ann.confidence = 1;
+  ann.edited = true;
+}
+
+function inferBookIdFromFolder(name) {
+  const match = String(name || '').match(/kcac[_-]?(\d{3,6})/i);
+  if (match) return `kcac_${pad(match[1], 6)}`;
+  return state.folderDefaults.bookId || state.pageMeta.book_id || 'kcac_000000';
+}
+
+function prepareFolderDefaults(folderName) {
+  const inferredBookId = inferBookIdFromFolder(folderName);
+  const currentBook = { ...defaultBookMeta(), ...state.bookMeta };
+  if (!currentBook.title_original && folderName) currentBook.title_original = folderName;
+  state.folderDefaults = {
+    active: true,
+    folderName: folderName || '',
+    bookId: inferredBookId,
+    startPage: Number(state.folderDefaults.startPage) || 1,
+    bookMeta: currentBook
+  };
+  state.bookMeta = { ...currentBook };
+  state.pageMeta.book_id = inferredBookId;
+}
+
+function applyCurrentCatalogToFolder() {
+  state.folderDefaults.active = true;
+  state.folderDefaults.bookId = state.pageMeta.book_id || state.folderDefaults.bookId || 'kcac_000000';
+  state.folderDefaults.startPage = Math.max(1, Number(state.pageMeta.page_number_sequence || state.currentIndex + 1) - Math.max(0, state.currentIndex));
+  state.folderDefaults.bookMeta = { ...state.bookMeta };
+  toast('Catalog defaults will apply to this folder', 'success');
+}
+
+function needsBookSetup() {
+  return !state.bookMeta.authors || !state.bookMeta.title_original || state.bookMeta.rights_status === 'unknown' || state.bookMeta.spdx_license === 'NOASSERTION';
+}
+
+function showBookSetupModal() {
+  document.getElementById('setupBookId').value = state.folderDefaults.bookId || state.pageMeta.book_id || 'kcac_000000';
+  document.getElementById('setupStartPage').value = state.folderDefaults.startPage || 1;
+  document.getElementById('setupTitle').value = state.bookMeta.title_original || state.folderDefaults.folderName || '';
+  document.getElementById('setupAuthors').value = state.bookMeta.authors || '';
+  document.getElementById('setupRights').value = state.bookMeta.rights_status || 'unknown';
+  document.getElementById('setupSpdx').value = state.bookMeta.spdx_license || 'NOASSERTION';
+  document.getElementById('setupSource').value = state.bookMeta.source_collection || '';
+  document.getElementById('setupSourceUrl').value = state.bookMeta.source_url || '';
+  document.getElementById('bookSetupModal').classList.add('show');
+}
+
+async function openImageFolder() {
+  if (!FS_API) { toast('Use Chrome/Edge for folder picker', 'error'); return; }
+  try {
+    const handle = await window.showDirectoryPicker({ mode: 'read' });
+    state.imageDirHandle = handle;
+    const files = [];
+    for await (const entry of handle.values()) {
+      if (entry.kind === 'file' && /\.(jpe?g|png|webp|tiff?|bmp)$/i.test(entry.name)) {
+        files.push({ handle: entry, name: entry.name });
+      }
+    }
+    files.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+    state.imageFiles = files;
+    state.currentIndex = -1;
+    state.savedSet.clear();
+    prepareFolderDefaults(handle.name);
+    document.getElementById('imgFolderStatus').textContent = `📷 ${handle.name} (${files.length})`;
+    document.getElementById('imgFolderStatus').className = 'folder-status ok';
+    rebuildFileList();
+    if (files.length > 0 && state.currentIndex < 0) await loadByIndex(0);
+    if (files.length > 0 && needsBookSetup()) showBookSetupModal();
+    toast(`Loaded ${files.length} images`, 'success');
+  } catch (e) { if (e.name !== 'AbortError') toast('Error: ' + e.message, 'error'); }
+}
+
+async function openJsonFolder() {
+  if (!FS_API) { toast('Use Chrome/Edge for folder picker', 'error'); return; }
+  try {
+    const handle = await window.showDirectoryPicker({ mode: 'readwrite' });
+    state.jsonDirHandle = handle;
+    const map = new Map();
+    for await (const entry of handle.values()) {
+      if (entry.kind === 'file' && entry.name.toLowerCase().endsWith('.json')) {
+        map.set(basenameNoExt(entry.name), { handle: entry, name: entry.name });
+      }
+    }
+    state.jsonFiles = map;
+    document.getElementById('jsonFolderStatus').textContent = `📄 ${handle.name} (${map.size})`;
+    document.getElementById('jsonFolderStatus').className = 'folder-status ok';
+    rebuildFileList();
+    if (state.currentIndex >= 0) await loadByIndex(state.currentIndex, { skipSave: true });
+    toast(`Loaded ${map.size} JSON files`, 'success');
+  } catch (e) { if (e.name !== 'AbortError') toast('Error: ' + e.message, 'error'); }
+}
+
+document.getElementById('openImageFolderBtn').addEventListener('click', openImageFolder);
+document.getElementById('openImageFolderBtn2').addEventListener('click', openImageFolder);
+document.getElementById('openJsonFolderBtn').addEventListener('click', openJsonFolder);
+document.getElementById('openJsonFolderBtn2').addEventListener('click', openJsonFolder);
+
+function inferPageMetaFromImage() {
+  const base = basenameNoExt(state.imageName || '');
+  const digits = base.match(/(\d{1,6})(?!.*\d)/);
+  const book = base.match(/kcac[_-]?(\d{3,6})/i);
+  const inferred = defaultPageMeta();
+  inferred.page_number_sequence = state.folderDefaults.active
+    ? (Number(state.folderDefaults.startPage) || 1) + Math.max(0, state.currentIndex)
+    : (digits ? parseInt(digits[1], 10) : (state.currentIndex >= 0 ? state.currentIndex + 1 : 1));
+  if (book) inferred.book_id = `kcac_${pad(book[1], 6)}`;
+  else if (state.folderDefaults.active) inferred.book_id = state.folderDefaults.bookId || inferred.book_id;
+  inferred.page_number_printed = String(inferred.page_number_sequence);
+  return inferred;
+}
+
+function resetMetadataForCurrentImage() {
+  state.pageMeta = inferPageMetaFromImage();
+  state.bookMeta = state.folderDefaults.active ? { ...state.folderDefaults.bookMeta } : defaultBookMeta();
+  updateMetaUI();
+}
+
+function updateMetaUI() {
+  document.querySelectorAll('[data-meta]').forEach(el => {
+    const target = el.dataset.meta === 'book' ? state.bookMeta : state.pageMeta;
+    const value = target[el.dataset.key];
+    if (el.type === 'checkbox') el.checked = !!value;
+    else el.value = value ?? '';
+  });
+  updateStableIdPreview();
+}
+
+function updateStableIdPreview() {
+  const el = document.getElementById('stableIdPreview');
+  if (!el) return;
+  el.textContent = `Page ID: ${buildPageId()}`;
+}
+
+document.querySelectorAll('[data-meta]').forEach(el => {
+  el.addEventListener('input', () => {
+    const target = el.dataset.meta === 'book' ? state.bookMeta : state.pageMeta;
+    let value = el.type === 'checkbox' ? el.checked : el.value;
+    if (el.type === 'number' && value !== '') value = Number(value);
+    target[el.dataset.key] = value;
+    if (el.dataset.meta === 'book' && state.folderDefaults.active) state.folderDefaults.bookMeta = { ...state.bookMeta };
+    if (el.dataset.meta === 'page' && el.dataset.key === 'book_id' && state.folderDefaults.active) state.folderDefaults.bookId = state.pageMeta.book_id;
+    if (el.dataset.meta === 'page' && el.dataset.key === 'page_number_sequence' && state.folderDefaults.active) {
+      state.folderDefaults.startPage = Math.max(1, Number(state.pageMeta.page_number_sequence || 1) - Math.max(0, state.currentIndex));
+    }
+    updateStableIdPreview();
+    updateSelectionUI();
+    markDirty();
+  });
+  el.addEventListener('change', () => { validatePage(false); });
+});
+
+document.getElementById('applyBookDefaultsBtn').addEventListener('click', () => {
+  applyCurrentCatalogToFolder();
+  validatePage(false);
+});
+
+function rebuildFileList() {
+  const list = document.getElementById('fileList');
+  list.innerHTML = '';
+  if (!state.imageFiles.length) {
+    list.innerHTML = `<div style="padding:20px; text-align:center; color:var(--muted); font-size:11px;">No files. Click <strong>Image Folder</strong> above.</div>`;
+    document.getElementById('navInfo').textContent = '— / —'; return;
+  }
+  const filter = state.fileFilter.toLowerCase();
+  state.imageFiles.forEach((f, idx) => {
+    if (filter && !f.name.toLowerCase().includes(filter)) return;
+    const div = document.createElement('div');
+    div.className = 'file-item' + (idx === state.currentIndex ? ' active' : '');
+    const base = basenameNoExt(f.name);
+    const hasJson = state.jsonFiles.has(base);
+    const isDirty = idx === state.currentIndex && state.dirty;
+    const isSaved = state.savedSet.has(base);
+    let badge;
+    if (isDirty) badge = '<span class="badge dirty">● edit</span>';
+    else if (isSaved) badge = '<span class="badge saved">✓ saved</span>';
+    else if (hasJson) badge = '<span class="badge ok">json</span>';
+    else badge = '<span class="badge miss">no json</span>';
+    div.innerHTML = `<span class="name" title="${f.name}">${f.name}</span>${badge}`;
+    div.addEventListener('click', () => loadByIndex(idx));
+    list.appendChild(div);
+  });
+  updateNavInfo();
+}
+
+function updateNavInfo() {
+  const t = state.imageFiles.length;
+  if (t === 0) document.getElementById('navInfo').textContent = '— / —';
+  else if (state.currentIndex < 0) document.getElementById('navInfo').textContent = `0 / ${t}`;
+  else document.getElementById('navInfo').textContent = `${state.currentIndex + 1} / ${t}`;
+}
+
+document.getElementById('fileSearch').addEventListener('input', e => { state.fileFilter = e.target.value; rebuildFileList(); });
+
+async function loadByIndex(idx, opts = {}) {
+  if (idx < 0 || idx >= state.imageFiles.length) return;
+  if (!opts.skipSave && state.dirty && document.getElementById('autosaveChk').checked) {
+    await saveCurrent({ silent: true });
+  }
+  const entry = state.imageFiles[idx];
+  state.currentIndex = idx;
+  try {
+    const file = await entry.handle.getFile();
+    await loadImageFromFile(file);
+  } catch (e) { toast('Failed to load image: ' + e.message, 'error'); return; }
+
+  const match = getMatchingJson(entry.name);
+  if (match) {
+    try {
+      const jsonFile = await match.handle.getFile();
+      const text = await jsonFile.text();
+      ingestJson(JSON.parse(text));
+      state.currentJsonHandle = match.handle;
+      state.currentJsonName = match.name;
+    } catch (e) {
+      toast('JSON parse error: ' + e.message, 'error');
+      state.annotations = []; state.currentJsonHandle = null; state.currentJsonName = null;
+      state.history = []; state.historyIdx = -1; pushHistory();
+    }
+  } else {
+    state.annotations = [];
+    resetMetadataForCurrentImage();
+    state.currentJsonHandle = null;
+    state.currentJsonName = basenameNoExt(entry.name) + '.json';
+    state.history = []; state.historyIdx = -1; pushHistory();
+    toast(`No JSON for ${entry.name} — starting empty`, 'warn');
+  }
+  state.selectedIds.clear();
+  state.dirty = false;
+  updateAll();
+  hideDropzone();
+}
+
+function ingestJson(data) {
+  state.jsonData = data;
+  state.annotations = [];
+  state.nextId = 1;
+  const incomingPage = data.page || data.page_metadata || {};
+  state.pageMeta = { ...inferPageMetaFromImage(), ...incomingPage };
+  if (!incomingPage.book_id && data.stable_ids?.book_id) state.pageMeta.book_id = data.stable_ids.book_id;
+  if (!incomingPage.page_number_sequence && data.stable_ids?.page_id) {
+    const m = String(data.stable_ids.page_id).match(/_p(\d{1,6})$/);
+    if (m) state.pageMeta.page_number_sequence = parseInt(m[1], 10);
+  }
+  state.bookMeta = {
+    ...(state.folderDefaults.active ? state.folderDefaults.bookMeta : defaultBookMeta()),
+    ...(data.book || data.bibliographic || data.catalog || {})
+  };
+
+  const lineItems = data.annotations?.lines || data.lines || data.text_lines || [];
+  const regionItems = data.annotations?.regions || data.regions || data.layout || [];
+  lineItems.forEach((item, idx) => {
+    state.annotations.push({
+      id: state.nextId++,
+      type: 'line',
+      bbox: readBbox(item),
+      confidence: item.confidence ?? item.score ?? 1,
+      label: 'TextLine',
+      angle: normalizeAngle(item.angle_degrees ?? item.rotation ?? item.angle ?? 0),
+      readingOrder: item.reading_order ?? item.readingOrder ?? idx + 1,
+      textRaw: item.transcription?.raw ?? item.text_raw ?? item.text ?? item.transcription ?? '',
+      textNormalized: item.transcription?.normalised ?? item.transcription?.normalized ?? item.text_normalised ?? item.text_normalized ?? '',
+      textPlain: item.transcription?.diacritic_stripped ?? item.text_diacritic_stripped ?? ''
+    });
+  });
+  regionItems.forEach((item, idx) => {
+    const label = normalizeClass(item.class || item.label || item.type || 'TextRegion');
+    state.annotations.push({
+      id: state.nextId++,
+      type: 'layout',
+      bbox: readBbox(item),
+      confidence: item.score ?? item.confidence ?? 1,
+      label,
+      angle: normalizeAngle(item.angle_degrees ?? item.rotation ?? item.angle ?? 0),
+      readingOrder: item.reading_order ?? item.readingOrder ?? idx + 1
+    });
+  });
+  state.history = []; state.historyIdx = -1; pushHistory();
+  updateMetaUI();
+  validatePage(false);
+}
+
+async function loadImageFromFile(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const img = new Image();
+      img.onload = () => { state.image = img; state.imageName = file.name; fitToView(); resolve(); };
+      img.onerror = reject;
+      img.src = ev.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+async function nextFile() {
+  if (state.currentIndex < state.imageFiles.length - 1) await loadByIndex(state.currentIndex + 1);
+  else toast('Already at last file', 'warn');
+}
+async function prevFile() {
+  if (state.currentIndex > 0) await loadByIndex(state.currentIndex - 1);
+  else toast('Already at first file', 'warn');
+}
+document.getElementById('nextBtn').addEventListener('click', nextFile);
+document.getElementById('prevBtn').addEventListener('click', prevFile);
+
+document.getElementById('loadImage').addEventListener('change', e => {
+  const f = e.target.files[0];
+  if (f) loadImageFromFile(f).then(() => { resetMetadataForCurrentImage(); updateAll(); hideDropzone(); toast('Image loaded', 'success'); });
+});
+document.getElementById('loadJson').addEventListener('change', e => {
+  const f = e.target.files[0];
+  if (!f) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try { ingestJson(JSON.parse(ev.target.result)); state.currentJsonName = f.name; state.dirty = false; updateAll(); hideDropzone(); toast(`Loaded ${state.annotations.length} annotations`, 'success'); }
+    catch (err) { toast('Bad JSON: ' + err.message, 'error'); }
+  };
+  reader.readAsText(f);
+});
+
+function hideDropzone() { if (state.image) document.getElementById('dropzone').classList.add('hidden'); }
+
+canvasArea.addEventListener('dragover', e => { e.preventDefault(); document.getElementById('dropzone').classList.add('active'); });
+canvasArea.addEventListener('dragleave', () => document.getElementById('dropzone').classList.remove('active'));
+canvasArea.addEventListener('drop', async e => {
+  e.preventDefault();
+  document.getElementById('dropzone').classList.remove('active');
+  for (const f of e.dataTransfer.files) {
+    if (f.type.startsWith('image/')) { await loadImageFromFile(f); resetMetadataForCurrentImage(); updateAll(); hideDropzone(); }
+    else if (f.name.endsWith('.json')) {
+      const text = await f.text();
+      try { ingestJson(JSON.parse(text)); state.currentJsonName = f.name; updateAll(); hideDropzone(); } catch {}
+    }
+  }
+});
+
+function fitToView() {
+  if (!state.image) return;
+  const padding = 40;
+  const sX = (canvas.width - padding * 2) / state.image.width;
+  const sY = (canvas.height - padding * 2) / state.image.height;
+  state.zoom = Math.min(sX, sY);
+  state.panX = (canvas.width - state.image.width * state.zoom) / 2;
+  state.panY = (canvas.height - state.image.height * state.zoom) / 2;
+  updateZoomStatus();
+}
+
+function draw() {
+  ctx.fillStyle = '#0a0d12';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  if (!state.image) return;
+  ctx.imageSmoothingEnabled = state.zoom < 2;
+  ctx.drawImage(state.image, state.panX, state.panY, state.image.width * state.zoom, state.image.height * state.zoom);
+  for (const ann of state.annotations) {
+    if (ann.type === 'line' && !state.showLines) continue;
+    if (ann.type === 'layout' && !state.showLayout) continue;
+    if (ann.confidence < state.confThreshold) continue;
+    drawAnn(ann);
+  }
+  if (state.isMarquee && state.marqueeStart && state.marqueeEnd) {
+    const x = Math.min(state.marqueeStart.x, state.marqueeEnd.x);
+    const y = Math.min(state.marqueeStart.y, state.marqueeEnd.y);
+    const w = Math.abs(state.marqueeEnd.x - state.marqueeStart.x);
+    const h = Math.abs(state.marqueeEnd.y - state.marqueeStart.y);
+    ctx.fillStyle = 'rgba(47,129,247,0.15)'; ctx.strokeStyle = 'rgba(47,129,247,0.9)';
+    ctx.lineWidth = 1; ctx.setLineDash([4, 3]);
+    ctx.fillRect(x, y, w, h); ctx.strokeRect(x, y, w, h); ctx.setLineDash([]);
+  }
+  if (state.isDrawing && state.drawStart && state.curMouse) {
+    const cur = state.curMouse;
+    const x = Math.min(state.drawStart.x, cur.x);
+    const y = Math.min(state.drawStart.y, cur.y);
+    const w = Math.abs(cur.x - state.drawStart.x);
+    const h = Math.abs(cur.y - state.drawStart.y);
+    ctx.strokeStyle = state.tool === 'draw-line' ? '#3fb950' : '#f78166';
+    ctx.lineWidth = 2; ctx.setLineDash([6, 4]);
+    ctx.strokeRect(x, y, w, h); ctx.setLineDash([]);
+  }
+}
+
+function drawAnn(ann) {
+  const [ix, iy, iw, ih] = ann.bbox;
+  const c = imageToScreen(ix + iw / 2, iy + ih / 2);
+  const w = iw * state.zoom, h = ih * state.zoom;
+  const isSel = state.selectedIds.has(ann.id);
+  const isHov = state.hoverIds.has(ann.id);
+  let stroke = ann.type === 'line' ? '#3fb950' : '#f78166';
+  let fill = ann.type === 'line' ? 'rgba(63,185,80,0.10)' : 'rgba(247,129,102,0.10)';
+  if (isSel) { stroke = '#ffd60a'; fill = 'rgba(255,214,10,0.18)'; }
+  else if (isHov) { fill = ann.type === 'line' ? 'rgba(63,185,80,0.22)' : 'rgba(247,129,102,0.22)'; }
+  ctx.save();
+  ctx.translate(c.x, c.y);
+  ctx.rotate(annAngle(ann) * Math.PI / 180);
+  ctx.fillStyle = fill; ctx.strokeStyle = stroke;
+  ctx.lineWidth = isSel ? 2.5 : 1.5;
+  ctx.fillRect(-w / 2, -h / 2, w, h);
+  ctx.strokeRect(-w / 2, -h / 2, w, h);
+  ctx.restore();
+  if (state.showLabels && (ann.type === 'layout' || isSel)) {
+    const text = ann.type === 'line' ? `line ${Number(ann.confidence).toFixed(2)} ${annAngle(ann)}deg` : `${ann.label} ${Number(ann.confidence).toFixed(2)} ${annAngle(ann)}deg`;
+    ctx.font = '11px -apple-system, sans-serif';
+    const tw = ctx.measureText(text).width + 8, th = 14;
+    const hp = getHandles(ann);
+    const lx = hp.nw.x, ly = hp.nw.y - th;
+    ctx.fillStyle = stroke;
+    ctx.fillRect(lx, ly, tw, th);
+    ctx.fillStyle = '#000';
+    ctx.fillText(text, lx + 4, ly + 11);
+  }
+  if (isSel && state.selectedIds.size === 1) {
+    const handles = getHandles(ann);
+    ctx.fillStyle = '#ffd60a'; ctx.strokeStyle = '#000'; ctx.lineWidth = 1;
+    for (const k in handles) {
+      const hd = handles[k];
+      if (k === 'rot') {
+        ctx.beginPath();
+        ctx.arc(hd.x, hd.y, 6, 0, Math.PI * 2);
+        ctx.fill(); ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(handles.n.x, handles.n.y);
+        ctx.lineTo(hd.x, hd.y);
+        ctx.stroke();
+      } else {
+        ctx.fillRect(hd.x - 4, hd.y - 4, 8, 8);
+        ctx.strokeRect(hd.x - 4, hd.y - 4, 8, 8);
+      }
+    }
+  }
+}
+
+function getHandles(ann) {
+  const [x, y, w, h] = ann.bbox.map(Number);
+  const c = imageToScreen(x + w / 2, y + h / 2);
+  const angle = annAngle(ann);
+  const local = {
+    nw: [-w/2, -h/2], n: [0, -h/2], ne: [w/2, -h/2],
+    e: [w/2, 0], se: [w/2, h/2], s: [0, h/2],
+    sw: [-w/2, h/2], w: [-w/2, 0], rot: [0, -h/2 - Math.max(24 / state.zoom, 8)]
+  };
+  const out = {};
+  for (const key in local) {
+    const r = rotatePointLocal(local[key][0] * state.zoom, local[key][1] * state.zoom, angle);
+    out[key] = { x: c.x + r.x, y: c.y + r.y };
+  }
+  return out;
+}
+
+function getAnnAtPoint(sx, sy) {
+  const candidates = [];
+  for (const ann of state.annotations) {
+    if (ann.type === 'line' && !state.showLines) continue;
+    if (ann.type === 'layout' && !state.showLayout) continue;
+    if (ann.confidence < state.confThreshold) continue;
+    const [ix, iy, iw, ih] = ann.bbox;
+    const local = screenPointToAnnLocal(sx, sy, ann);
+    if (local.x >= -iw / 2 && local.x <= iw / 2 && local.y >= -ih / 2 && local.y <= ih / 2) candidates.push({ ann, area: iw * ih });
+  }
+  if (!candidates.length) return null;
+  candidates.sort((a, b) => a.area - b.area);
+  return candidates[0].ann;
+}
+
+function getHandleAtPoint(sx, sy, ann) {
+  const handles = getHandles(ann);
+  for (const k in handles) {
+    const threshold = k === 'rot' ? 9 : 6;
+    if (Math.abs(sx - handles[k].x) <= threshold && Math.abs(sy - handles[k].y) <= threshold) return k;
+  }
+  return null;
+}
+
+function markDirty() {
+  if (!state.dirty) {
+    state.dirty = true;
+    updateDirtyUI();
+    rebuildFileList();
+  }
+}
+function updateDirtyUI() {
+  const el = document.getElementById('statusDirty');
+  if (state.dirty) { el.textContent = '● unsaved'; el.className = 'status-pill warn'; }
+  else if (state.currentJsonName) { el.textContent = '✓ saved'; el.className = 'status-pill success'; }
+  else { el.textContent = ''; el.className = 'status-pill'; }
+}
+
+canvas.addEventListener('mousedown', e => {
+  const rect = canvas.getBoundingClientRect();
+  const sx = e.clientX - rect.left, sy = e.clientY - rect.top;
+  if (e.button === 1 || (e.button === 0 && state.spaceDown)) {
+    state.isPanning = true;
+    state.dragStart = { x: sx, y: sy, panX: state.panX, panY: state.panY };
+    canvas.style.cursor = 'grabbing'; return;
+  }
+  if (state.tool === 'draw-line' || state.tool === 'draw-layout') {
+    state.isDrawing = true;
+    state.drawStart = { x: sx, y: sy };
+    state.curMouse = { x: sx, y: sy };
+    return;
+  }
+  if (state.selectedIds.size === 1) {
+    const sel = state.annotations.find(a => state.selectedIds.has(a.id));
+    if (sel) {
+      const handle = getHandleAtPoint(sx, sy, sel);
+      if (handle) {
+        if (handle === 'rot') {
+          const c = imageToScreen(sel.bbox[0] + sel.bbox[2] / 2, sel.bbox[1] + sel.bbox[3] / 2);
+          state.isRotating = true; state.resizeHandle = handle;
+          state.dragStart = { x: sx, y: sy, cx: c.x, cy: c.y, startAngle: annAngle(sel), pointerAngle: Math.atan2(sy - c.y, sx - c.x) * 180 / Math.PI };
+        } else {
+          state.isResizing = true; state.resizeHandle = handle;
+          state.dragStart = { x: sx, y: sy };
+          state.dragOrigBboxes = new Map([[sel.id, { bbox: [...sel.bbox], angle: annAngle(sel) }]]);
+        }
+        return;
+      }
+    }
+  }
+  const ann = getAnnAtPoint(sx, sy);
+  if (ann) {
+    if (e.shiftKey) {
+      if (state.selectedIds.has(ann.id)) state.selectedIds.delete(ann.id);
+      else state.selectedIds.add(ann.id);
+    } else if (!state.selectedIds.has(ann.id)) {
+      state.selectedIds.clear(); state.selectedIds.add(ann.id);
+    }
+    state.isDragging = true;
+    state.dragStart = { x: sx, y: sy };
+    state.dragOrigBboxes = new Map();
+    for (const id of state.selectedIds) {
+      const a = state.annotations.find(a => a.id === id);
+      if (a) state.dragOrigBboxes.set(id, { bbox: [...a.bbox], angle: annAngle(a) });
+    }
+  } else {
+    if (!e.shiftKey) state.selectedIds.clear();
+    state.isMarquee = true;
+    state.marqueeStart = { x: sx, y: sy };
+    state.marqueeEnd = { x: sx, y: sy };
+  }
+  updateSelectionUI(); draw();
+});
+
+canvas.addEventListener('mousemove', e => {
+  const rect = canvas.getBoundingClientRect();
+  const sx = e.clientX - rect.left, sy = e.clientY - rect.top;
+  state.curMouse = { x: sx, y: sy };
+  if (state.image) {
+    const img = screenToImage(sx, sy);
+    document.getElementById('statusCoords').textContent = `${Math.round(img.x)} , ${Math.round(img.y)}`;
+  }
+  if (state.isPanning) {
+    state.panX = state.dragStart.panX + (sx - state.dragStart.x);
+    state.panY = state.dragStart.panY + (sy - state.dragStart.y);
+    draw(); return;
+  }
+  if (state.isResizing) {
+    const ann = state.annotations.find(a => state.selectedIds.has(a.id));
+    if (!ann) return;
+    const origState = state.dragOrigBboxes.get(ann.id);
+    const orig = origState?.bbox || origState;
+    const angle = origState?.angle ?? annAngle(ann);
+    const d = screenVectorToLocal(sx - state.dragStart.x, sy - state.dragStart.y, angle);
+    let [x, y, w, h] = orig;
+    const origCx = x + w / 2, origCy = y + h / 2;
+    let shiftX = 0, shiftY = 0;
+    const h_ = state.resizeHandle;
+    if (h_.includes('w')) { w -= d.x; shiftX += d.x / 2; }
+    if (h_.includes('e')) { w += d.x; shiftX += d.x / 2; }
+    if (h_.includes('n')) { h -= d.y; shiftY += d.y / 2; }
+    if (h_.includes('s')) { h += d.y; shiftY += d.y / 2; }
+    if (w > 4 && h > 4) {
+      const shift = localVectorToImage(shiftX, shiftY, angle);
+      const cx = origCx + shift.x, cy = origCy + shift.y;
+      ann.bbox = [cx - w / 2, cy - h / 2, w, h];
+      ann.angle = angle;
+      markAnnotationEdited(ann);
+    }
+    draw(); return;
+  }
+  if (state.isRotating) {
+    const ann = state.annotations.find(a => state.selectedIds.has(a.id));
+    if (!ann) return;
+    const pointerAngle = Math.atan2(sy - state.dragStart.cy, sx - state.dragStart.cx) * 180 / Math.PI;
+    ann.angle = normalizeAngle(state.dragStart.startAngle + pointerAngle - state.dragStart.pointerAngle);
+    markAnnotationEdited(ann);
+    draw(); return;
+  }
+  if (state.isDragging) {
+    const dxImg = (sx - state.dragStart.x) / state.zoom;
+    const dyImg = (sy - state.dragStart.y) / state.zoom;
+    for (const id of state.selectedIds) {
+      const a = state.annotations.find(a => a.id === id);
+      const origState = state.dragOrigBboxes.get(id);
+      const orig = origState?.bbox || origState;
+      if (a && orig) { a.bbox = [orig[0] + dxImg, orig[1] + dyImg, orig[2], orig[3]]; markAnnotationEdited(a); }
+    }
+    draw(); return;
+  }
+  if (state.isDrawing) { draw(); return; }
+  if (state.isMarquee) { state.marqueeEnd = { x: sx, y: sy }; draw(); return; }
+  const hovered = getAnnAtPoint(sx, sy);
+  const newHov = new Set();
+  if (hovered) newHov.add(hovered.id);
+  if (newHov.size !== state.hoverIds.size || [...newHov].some(id => !state.hoverIds.has(id))) {
+    state.hoverIds = newHov; draw();
+  }
+  if (state.selectedIds.size === 1) {
+    const sel = state.annotations.find(a => state.selectedIds.has(a.id));
+    if (sel) {
+      const handle = getHandleAtPoint(sx, sy, sel);
+      if (handle) {
+        if (handle === 'rot') { canvas.style.cursor = 'grab'; return; }
+        const cursors = { nw:'nwse-resize', se:'nwse-resize', ne:'nesw-resize', sw:'nesw-resize', n:'ns-resize', s:'ns-resize', e:'ew-resize', w:'ew-resize' };
+        canvas.style.cursor = cursors[handle]; return;
+      }
+    }
+  }
+  canvas.style.cursor = state.tool === 'select' ? (hovered ? 'move' : (state.spaceDown ? 'grab' : 'default')) : 'crosshair';
+});
+
+canvas.addEventListener('mouseup', e => {
+  if (state.isPanning) { state.isPanning = false; canvas.style.cursor = 'default'; }
+  if (state.isDragging) { state.isDragging = false; pushHistory(); markDirty(); updateSelectionUI(); }
+  if (state.isResizing) { state.isResizing = false; state.resizeHandle = null; pushHistory(); markDirty(); updateSelectionUI(); }
+  if (state.isRotating) { state.isRotating = false; state.resizeHandle = null; pushHistory(); markDirty(); updateSelectionUI(); }
+  if (state.isDrawing && state.drawStart && state.curMouse) {
+    const cur = state.curMouse, start = state.drawStart;
+    const x1 = Math.min(start.x, cur.x), y1 = Math.min(start.y, cur.y);
+    const x2 = Math.max(start.x, cur.x), y2 = Math.max(start.y, cur.y);
+    if (x2 - x1 > 4 && y2 - y1 > 4) {
+      const i1 = screenToImage(x1, y1), i2 = screenToImage(x2, y2);
+      const newAnn = {
+        id: state.nextId++,
+        type: state.tool === 'draw-line' ? 'line' : 'layout',
+        bbox: [i1.x, i1.y, i2.x - i1.x, i2.y - i1.y],
+        confidence: 1.0,
+        angle: 0,
+        label: state.tool === 'draw-line' ? 'TextLine' : 'TextRegion',
+        readingOrder: nextReadingOrder(state.tool === 'draw-line' ? 'line' : 'layout'),
+        textRaw: '',
+        textNormalized: '',
+        textPlain: ''
+      };
+      state.annotations.push(newAnn);
+      state.selectedIds.clear(); state.selectedIds.add(newAnn.id);
+      pushHistory(); markDirty(); updateAll();
+      toast('New ' + (newAnn.type === 'line' ? 'text line' : 'layout region'), 'success');
+    }
+    state.isDrawing = false; state.drawStart = null;
+  }
+  if (state.isMarquee) {
+    const x1 = Math.min(state.marqueeStart.x, state.marqueeEnd.x);
+    const y1 = Math.min(state.marqueeStart.y, state.marqueeEnd.y);
+    const x2 = Math.max(state.marqueeStart.x, state.marqueeEnd.x);
+    const y2 = Math.max(state.marqueeStart.y, state.marqueeEnd.y);
+    if (x2 - x1 > 3 && y2 - y1 > 3) {
+      for (const ann of state.annotations) {
+        if (ann.type === 'line' && !state.showLines) continue;
+        if (ann.type === 'layout' && !state.showLayout) continue;
+        if (ann.confidence < state.confThreshold) continue;
+        const [ix, iy, iw, ih] = ann.bbox;
+        const p = imageToScreen(ix, iy);
+        const aw = iw * state.zoom, ah = ih * state.zoom;
+        if (p.x < x2 && p.x + aw > x1 && p.y < y2 && p.y + ah > y1) state.selectedIds.add(ann.id);
+      }
+    }
+    state.isMarquee = false; state.marqueeStart = state.marqueeEnd = null;
+    updateSelectionUI();
+  }
+  draw();
+});
+
+canvas.addEventListener('wheel', e => {
+  e.preventDefault();
+  const rect = canvas.getBoundingClientRect();
+  const sx = e.clientX - rect.left, sy = e.clientY - rect.top;
+  const before = screenToImage(sx, sy);
+  const factor = e.deltaY < 0 ? 1.15 : 1 / 1.15;
+  state.zoom *= factor;
+  state.zoom = Math.max(0.05, Math.min(20, state.zoom));
+  state.panX = sx - before.x * state.zoom;
+  state.panY = sy - before.y * state.zoom;
+  updateZoomStatus(); draw();
+}, { passive: false });
+
+canvas.addEventListener('mouseleave', () => { state.hoverIds.clear(); draw(); });
+
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  const ctrl = e.ctrlKey || e.metaKey;
+  if (e.code === 'Space') { state.spaceDown = true; canvas.style.cursor = 'grab'; return; }
+  if (e.key === 'PageDown') { e.preventDefault(); nextFile(); return; }
+  if (e.key === 'PageUp') { e.preventDefault(); prevFile(); return; }
+  if (e.key === 'Delete' || e.key === 'Backspace') { e.preventDefault(); deleteSelected(); }
+  else if (e.key === 'Escape') { state.selectedIds.clear(); updateSelectionUI(); draw(); }
+  else if (ctrl && e.key === 'a') { e.preventDefault(); selectAll(); }
+  else if (ctrl && e.key === 'z' && !e.shiftKey) { e.preventDefault(); undo(); }
+  else if ((ctrl && e.key === 'y') || (ctrl && e.shiftKey && e.key === 'Z')) { e.preventDefault(); redo(); }
+  else if (ctrl && e.key === 's') { e.preventDefault(); saveCurrent(); }
+  else if (e.key === 'v' || e.key === 'V') setTool('select');
+  else if (e.key === 'l' || e.key === 'L') setTool('draw-line');
+  else if (e.key === 'r' || e.key === 'R') setTool('draw-layout');
+  else if (e.key === '[' || e.key === ']') {
+    if (state.selectedIds.size > 0) {
+      e.preventDefault();
+      const delta = (e.key === '[' ? -1 : 1) * (e.shiftKey ? 10 : 1);
+      for (const id of state.selectedIds) {
+        const a = state.annotations.find(item => item.id === id);
+        if (a) { a.angle = normalizeAngle(annAngle(a) + delta); markAnnotationEdited(a); }
+      }
+      pushHistory(); markDirty(); updateSelectionUI(); draw();
+    }
+  }
+  else if (e.key.startsWith('Arrow')) {
+    if (state.selectedIds.size > 0) {
+      e.preventDefault();
+      const step = e.shiftKey ? 10 : 1;
+      const dx = e.key === 'ArrowLeft' ? -step : e.key === 'ArrowRight' ? step : 0;
+      const dy = e.key === 'ArrowUp' ? -step : e.key === 'ArrowDown' ? step : 0;
+      for (const id of state.selectedIds) {
+        const a = state.annotations.find(a => a.id === id);
+        if (a) { a.bbox[0] += dx; a.bbox[1] += dy; markAnnotationEdited(a); }
+      }
+      pushHistory(); markDirty(); updateSelectionUI(); draw();
+    }
+  }
+});
+document.addEventListener('keyup', e => {
+  if (e.code === 'Space') { state.spaceDown = false; canvas.style.cursor = 'default'; }
+});
+
+function setTool(t) {
+  state.tool = t;
+  document.querySelectorAll('.tool-btn').forEach(b => b.classList.toggle('active', b.dataset.tool === t));
+  document.getElementById('statusMode').textContent = 'Mode: ' + (t === 'select' ? 'Select' : t === 'draw-line' ? 'Draw Text Line' : 'Draw Layout');
+  canvas.style.cursor = t === 'select' ? 'default' : 'crosshair';
+}
+document.querySelectorAll('.tool-btn').forEach(b => b.addEventListener('click', () => setTool(b.dataset.tool)));
+
+function deleteSelected() {
+  if (!state.selectedIds.size) return;
+  const n = state.selectedIds.size;
+  state.annotations = state.annotations.filter(a => !state.selectedIds.has(a.id));
+  state.selectedIds.clear();
+  pushHistory(); markDirty(); updateAll();
+  toast(`Deleted ${n}`, 'success');
+}
+function selectAll() {
+  state.selectedIds.clear();
+  for (const a of state.annotations) {
+    if (a.type === 'line' && !state.showLines) continue;
+    if (a.type === 'layout' && !state.showLayout) continue;
+    if (a.confidence < state.confThreshold) continue;
+    state.selectedIds.add(a.id);
+  }
+  updateSelectionUI(); draw();
+}
+function deselectAll() { state.selectedIds.clear(); updateSelectionUI(); draw(); }
+function invertSelection() {
+  const visible = state.annotations.filter(a => {
+    if (a.type === 'line' && !state.showLines) return false;
+    if (a.type === 'layout' && !state.showLayout) return false;
+    if (a.confidence < state.confThreshold) return false;
+    return true;
+  });
+  const newSel = new Set();
+  for (const a of visible) if (!state.selectedIds.has(a.id)) newSel.add(a.id);
+  state.selectedIds = newSel;
+  updateSelectionUI(); draw();
+}
+document.getElementById('deleteBtn').addEventListener('click', deleteSelected);
+document.getElementById('selectAllBtn').addEventListener('click', selectAll);
+document.getElementById('deselectBtn').addEventListener('click', deselectAll);
+document.getElementById('invertBtn').addEventListener('click', invertSelection);
+
+document.querySelectorAll('.class-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (!state.selectedIds.size) return;
+    const cls = btn.dataset.class;
+    let n = 0;
+    for (const id of state.selectedIds) {
+      const a = state.annotations.find(a => a.id === id);
+      if (!a) continue;
+      if (isLineClass(cls)) { a.type = 'line'; a.label = 'TextLine'; if (!a.readingOrder) a.readingOrder = nextReadingOrder('line'); }
+      else { a.type = 'layout'; a.label = normalizeClass(cls); if (!a.readingOrder) a.readingOrder = nextReadingOrder('layout'); }
+      markAnnotationEdited(a);
+      n++;
+    }
+    pushHistory(); markDirty(); updateAll();
+    toast(`Changed ${n} → ${cls}`, 'success');
+  });
+});
+
+document.getElementById('deleteLowConfBtn').addEventListener('click', () => {
+  const t = state.confThreshold;
+  if (t === 0) { toast('Set threshold > 0 first', 'error'); return; }
+  const before = state.annotations.length;
+  state.annotations = state.annotations.filter(a => a.confidence >= t);
+  state.selectedIds.clear();
+  pushHistory(); markDirty(); updateAll();
+  toast(`Deleted ${before - state.annotations.length} low-conf`, 'success');
+});
+
+document.getElementById('showLines').addEventListener('change', e => { state.showLines = e.target.checked; draw(); });
+document.getElementById('showLayout').addEventListener('change', e => { state.showLayout = e.target.checked; draw(); });
+document.getElementById('showLabels').addEventListener('change', e => { state.showLabels = e.target.checked; draw(); });
+document.getElementById('confThreshold').addEventListener('input', e => {
+  state.confThreshold = parseFloat(e.target.value);
+  document.getElementById('confValue').textContent = state.confThreshold.toFixed(2);
+  draw();
+});
+
+function updateAll() { updateStats(); updateAnnList(); updateSelectionUI(); updateDirtyUI(); updateNavInfo(); rebuildFileList(); draw(); }
+function updateStats() {
+  const lines = state.annotations.filter(a => a.type === 'line').length;
+  const layout = state.annotations.filter(a => a.type === 'layout').length;
+  document.getElementById('statLines').textContent = lines;
+  document.getElementById('statLayout').textContent = layout;
+  document.getElementById('lineCount').textContent = lines;
+  document.getElementById('layoutCount').textContent = layout;
+  document.getElementById('statImg').textContent = state.imageName || '—';
+  document.getElementById('statSize').textContent = state.image ? `${state.image.width}×${state.image.height}` : '—';
+}
+function updateAnnList() {
+  const list = document.getElementById('annList');
+  list.innerHTML = '';
+  for (const a of state.annotations) {
+    const div = document.createElement('div');
+    div.className = 'ann-item' + (state.selectedIds.has(a.id) ? ' selected' : '');
+    div.innerHTML = `<span class="swatch" style="background:${a.type === 'line' ? '#3fb950' : '#f78166'}"></span><span class="label">${stableAnnotationId(a)} ${a.label}</span><span class="conf">${Number(a.confidence).toFixed(2)}</span>`;
+    div.addEventListener('click', e => {
+      if (e.shiftKey) {
+        if (state.selectedIds.has(a.id)) state.selectedIds.delete(a.id);
+        else state.selectedIds.add(a.id);
+      } else { state.selectedIds.clear(); state.selectedIds.add(a.id); }
+      updateSelectionUI(); draw();
+    });
+    list.appendChild(div);
+  }
+}
+function updateSelectionUI() {
+  document.getElementById('selCount').textContent = state.selectedIds.size;
+  document.getElementById('selectionEditor').style.display = state.selectedIds.size ? 'block' : 'none';
+  document.getElementById('deleteBtn').disabled = !state.selectedIds.size;
+  updateSingleSelectionUI();
+  const list = document.getElementById('annList').children;
+  let i = 0;
+  for (const a of state.annotations) {
+    if (list[i]) list[i].classList.toggle('selected', state.selectedIds.has(a.id));
+    i++;
+  }
+}
+
+function getSingleSelectedAnn() {
+  if (state.selectedIds.size !== 1) return null;
+  return state.annotations.find(a => state.selectedIds.has(a.id)) || null;
+}
+
+function updateSingleSelectionUI() {
+  const box = document.getElementById('singleSelectionFields');
+  const ann = getSingleSelectedAnn();
+  if (!box) return;
+  box.style.display = ann ? 'block' : 'none';
+  if (!ann) return;
+  state.updatingSelectionFields = true;
+  document.getElementById('selectedStableId').value = stableAnnotationId(ann);
+  document.getElementById('readingOrderInput').value = readingOrderValue(ann) ?? '';
+  document.getElementById('annConfidenceInput').value = round4(ann.confidence);
+  document.getElementById('rotationInput').value = annAngle(ann);
+  document.getElementById('annKindInput').value = ann.type === 'line' ? 'line' : 'region';
+  document.getElementById('rawTextInput').value = ann.textRaw || '';
+  document.getElementById('normTextInput').value = ann.textNormalized || '';
+  document.getElementById('plainTextInput').value = ann.textPlain || '';
+  state.updatingSelectionFields = false;
+}
+
+function bindSelectionField(id, apply) {
+  const el = document.getElementById(id);
+  el.addEventListener('input', () => {
+    if (state.updatingSelectionFields) return;
+    const ann = getSingleSelectedAnn();
+    if (!ann) return;
+    apply(ann, el.value);
+    if (id !== 'annConfidenceInput') markAnnotationEdited(ann);
+    markDirty();
+    if (id === 'readingOrderInput') document.getElementById('selectedStableId').value = stableAnnotationId(ann);
+    if (id !== 'annConfidenceInput') document.getElementById('annConfidenceInput').value = round4(ann.confidence);
+    updateAnnList();
+    draw();
+  });
+  el.addEventListener('change', () => { pushHistory(); validatePage(false); });
+}
+
+bindSelectionField('readingOrderInput', (ann, value) => { ann.readingOrder = value === '' ? null : Number(value); });
+bindSelectionField('annConfidenceInput', (ann, value) => { ann.confidence = Math.max(0, Math.min(1, Number(value) || 0)); });
+bindSelectionField('rotationInput', (ann, value) => { ann.angle = normalizeAngle(value); markAnnotationEdited(ann); });
+bindSelectionField('rawTextInput', (ann, value) => { ann.textRaw = value; });
+bindSelectionField('normTextInput', (ann, value) => { ann.textNormalized = value; });
+bindSelectionField('plainTextInput', (ann, value) => { ann.textPlain = value; });
+function updateZoomStatus() { document.getElementById('statusZoom').textContent = Math.round(state.zoom * 100) + '%'; }
+
+function pushHistory() {
+  state.history = state.history.slice(0, state.historyIdx + 1);
+  state.history.push(JSON.stringify({ annotations: state.annotations, nextId: state.nextId }));
+  if (state.history.length > 50) state.history.shift();
+  state.historyIdx = state.history.length - 1;
+}
+function undo() {
+  if (state.historyIdx <= 0) { toast('Nothing to undo', 'error'); return; }
+  state.historyIdx--; applyHistory(); markDirty();
+}
+function redo() {
+  if (state.historyIdx >= state.history.length - 1) { toast('Nothing to redo', 'error'); return; }
+  state.historyIdx++; applyHistory(); markDirty();
+}
+function applyHistory() {
+  const snap = JSON.parse(state.history[state.historyIdx]);
+  state.annotations = snap.annotations; state.nextId = snap.nextId;
+  state.selectedIds.clear();
+  updateAll();
+}
+document.getElementById('undoBtn').addEventListener('click', undo);
+document.getElementById('redoBtn').addEventListener('click', redo);
+
+function imageWidth() { return state.image ? state.image.width : (state.jsonData?.width ?? 0); }
+function imageHeight() { return state.image ? state.image.height : (state.jsonData?.height ?? 0); }
+function roundedBbox(a) { return a.bbox.map(round2); }
+function lineText(ann) { return ann.textRaw || ann.textNormalized || ann.textPlain || ''; }
+
+function buildLineRecord(ann) {
+  return {
+    id: stableAnnotationId(ann),
+    line_id: stableAnnotationId(ann),
+    bbox: roundedBbox(ann),
+    polygon: annPolygon(ann),
+    baseline: annBaseline(ann),
+    angle_degrees: annAngle(ann),
+    confidence: round4(ann.confidence),
+    reading_order: readingOrderValue(ann) ?? ordinalFor(ann),
+    transcription: {
+      raw: ann.textRaw || '',
+      normalised: ann.textNormalized || '',
+      diacritic_stripped: ann.textPlain || ''
+    },
+    verification_status: state.pageMeta.verification_status
+  };
+}
+
+function buildRegionRecord(ann) {
+  return {
+    id: stableAnnotationId(ann),
+    region_id: stableAnnotationId(ann),
+    class: normalizeClass(ann.label),
+    bbox: roundedBbox(ann),
+    polygon: annPolygon(ann),
+    angle_degrees: annAngle(ann),
+    confidence: round4(ann.confidence),
+    reading_order: readingOrderValue(ann) ?? ordinalFor(ann),
+    verification_status: state.pageMeta.verification_status
+  };
+}
+
+function buildSuryaJson() {
+  const pageId = buildPageId();
+  const W = imageWidth(), H = imageHeight();
+  const regions = annotationsByType('layout').map(buildRegionRecord);
+  const lines = annotationsByType('line').map(buildLineRecord);
+  return {
+    schema_name: SCHEMA_NAME,
+    schema_version: SCHEMA_VERSION,
+    standards_alignment: STANDARDS,
+    file: state.imageName || (state.jsonData?.file ?? 'image.jpg'),
+    width: W,
+    height: H,
+    bbox_format: 'coco_xywh',
+    stable_ids: {
+      book_id: state.pageMeta.book_id,
+      page_id: pageId
+    },
+    book: { ...state.bookMeta },
+    page: {
+      ...state.pageMeta,
+      page_id: pageId,
+      pixel_dimensions: { width: W, height: H },
+      image_filename: state.imageName || (state.jsonData?.file ?? 'image.jpg')
+    },
+    annotations: { regions, lines },
+    text_lines: lines.map(line => ({
+      id: line.line_id,
+      bbox: line.bbox,
+      polygon: line.polygon,
+      baseline: line.baseline,
+      angle_degrees: line.angle_degrees,
+      confidence: line.confidence,
+      reading_order: line.reading_order,
+      text_raw: line.transcription.raw,
+      text_normalised: line.transcription.normalised,
+      text_diacritic_stripped: line.transcription.diacritic_stripped
+    })),
+    layout: regions.map(region => ({
+      id: region.region_id,
+      bbox: region.bbox,
+      polygon: region.polygon,
+      label: region.class,
+      angle_degrees: region.angle_degrees,
+      score: region.confidence,
+      reading_order: region.reading_order
+    }))
+  };
+}
+
+async function saveCurrent(opts = {}) {
+  if (!state.annotations.length && !state.image) return;
+  validatePage(false);
+  const out = buildSuryaJson();
+  const json = JSON.stringify(out, null, 2);
+  if (state.jsonDirHandle) {
+    try {
+      let handle = state.currentJsonHandle;
+      if (!handle) {
+        const name = state.currentJsonName || (basenameNoExt(state.imageName) + '.json');
+        handle = await state.jsonDirHandle.getFileHandle(name, { create: true });
+        state.currentJsonHandle = handle;
+        state.currentJsonName = name;
+        state.jsonFiles.set(basenameNoExt(name), { handle, name });
+      }
+      const writable = await handle.createWritable();
+      await writable.write(json);
+      await writable.close();
+      state.dirty = false;
+      state.savedSet.add(basenameNoExt(state.imageName));
+      updateDirtyUI(); rebuildFileList();
+      if (!opts.silent) toast('Saved → ' + (state.currentJsonName || 'file'), 'success');
+      return;
+    } catch (e) { toast('Save failed: ' + e.message, 'error'); return; }
+  }
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = (state.currentJsonName || (basenameNoExt(state.imageName) + '_corrected.json'));
+  a.click();
+  URL.revokeObjectURL(url);
+  state.dirty = false;
+  updateDirtyUI();
+  if (!opts.silent) toast('Downloaded JSON', 'success');
+}
+document.getElementById('saveJsonBtn').addEventListener('click', () => saveCurrent());
+
+function validatePage(showToast = true) {
+  const issues = [];
+  const bookId = (state.pageMeta.book_id || '').trim();
+  if (!/^kcac_\d{6}$/.test(bookId)) issues.push({ type: 'error', text: 'book_id must match kcac_000152 style.' });
+  if (!Number.isInteger(Number(state.pageMeta.page_number_sequence)) || Number(state.pageMeta.page_number_sequence) < 1) issues.push({ type: 'error', text: 'page_number_sequence must be a positive integer.' });
+  if (!state.pageMeta.language || state.pageMeta.language === 'mixed') issues.push({ type: 'warn', text: 'BCP 47 language tag is mixed or missing.' });
+  if (!state.bookMeta.spdx_license || state.bookMeta.spdx_license === 'NOASSERTION') issues.push({ type: 'warn', text: 'SPDX licence is not asserted.' });
+  if (!state.bookMeta.rights_status || state.bookMeta.rights_status === 'unknown') issues.push({ type: 'warn', text: 'rights_status is unknown.' });
+  if (!state.annotations.some(a => a.type === 'layout')) issues.push({ type: 'warn', text: 'No region-level layout annotations.' });
+  if (!state.annotations.some(a => a.type === 'line')) issues.push({ type: 'warn', text: 'No line-level OCR ground-truth annotations.' });
+  const verified = PUBLIC_VERIFICATION.has(state.pageMeta.verification_status);
+  if (verified) {
+    const blankLines = state.annotations.filter(a => a.type === 'line' && !lineText(a).trim()).length;
+    if (blankLines) issues.push({ type: 'warn', text: `${blankLines} verified line(s) have no transcription.` });
+  }
+  for (const type of ['line', 'layout']) {
+    const seen = new Map();
+    state.annotations.filter(a => a.type === type).forEach(a => {
+      const ro = readingOrderValue(a);
+      if (ro === null) return;
+      if (seen.has(ro)) issues.push({ type: 'warn', text: `Duplicate ${type} reading order ${ro}.` });
+      seen.set(ro, a.id);
+    });
+  }
+  const W = imageWidth(), H = imageHeight();
+  if (W && H) {
+    state.annotations.forEach(a => {
+      const [x, y, w, h] = a.bbox.map(Number);
+      if (x < 0 || y < 0 || x + w > W || y + h > H) issues.push({ type: 'warn', text: `${stableAnnotationId(a)} extends outside the image.` });
+    });
+  }
+  if (state.pageMeta.verification_status === 'raw') issues.push({ type: 'warn', text: 'raw verification is internal-only in the briefing.' });
+  if (!issues.length) issues.push({ type: 'ok', text: 'KCAC v0.1 page checks passed.' });
+  state.validationIssues = issues;
+  renderValidationIssues();
+  if (showToast) {
+    const hasError = issues.some(i => i.type === 'error');
+    const hasWarn = issues.some(i => i.type === 'warn');
+    toast(hasError ? 'Validation has errors' : hasWarn ? 'Validation has warnings' : 'Validation passed', hasError ? 'error' : hasWarn ? 'warn' : 'success');
+  }
+  return issues;
+}
+
+function renderValidationIssues() {
+  const list = document.getElementById('qcList');
+  list.innerHTML = '';
+  for (const issue of state.validationIssues.length ? state.validationIssues : [{ type: 'warn', text: 'Not checked' }]) {
+    const div = document.createElement('div');
+    div.className = 'issue ' + issue.type;
+    div.textContent = issue.text;
+    list.appendChild(div);
+  }
+}
+
+document.getElementById('runQcBtn').addEventListener('click', () => validatePage(true));
+
+function exportYolo() {
+  if (!state.image) { toast('Load an image first', 'error'); return; }
+  const W = state.image.width, H = state.image.height;
+  const classes = ['text_line'];
+  for (const a of state.annotations) if (a.type === 'layout' && !classes.includes(a.label)) classes.push(a.label);
+  const lines = [];
+  for (const a of state.annotations) {
+    const cid = a.type === 'line' ? 0 : classes.indexOf(a.label);
+    const [x, y, w, h] = a.bbox;
+    const cx = (x + w/2) / W, cy = (y + h/2) / H;
+    const nw = w / W, nh = h / H;
+    lines.push(`${cid} ${cx.toFixed(6)} ${cy.toFixed(6)} ${nw.toFixed(6)} ${nh.toFixed(6)}`);
+  }
+  const base = basenameNoExt(state.imageName);
+  downloadFile(lines.join('\n'), base + '.txt', 'text/plain');
+  downloadFile(classes.join('\n'), 'classes.txt', 'text/plain');
+  toast(`Exported YOLO (${classes.length} classes)`, 'success');
+}
+function downloadFile(content, name, type) {
+  const blob = new Blob([content], { type });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = name; a.click();
+  URL.revokeObjectURL(url);
+}
+document.getElementById('exportYoloBtn').addEventListener('click', exportYolo);
+
+function pageXmlRegionTag(cls) {
+  if (cls === 'Table') return 'TableRegion';
+  if (cls === 'Illustration' || cls === 'Figure') return 'ImageRegion';
+  if (cls === 'MathRegion') return 'MathsRegion';
+  if (['DecorativeElement', 'Signature', 'Stamp'].includes(cls)) return 'GraphicRegion';
+  if (cls === 'Advertisement') return 'AdvertRegion';
+  return 'TextRegion';
+}
+
+function groupLinesByRegions() {
+  const regions = annotationsByType('layout');
+  const lines = annotationsByType('line');
+  const groups = regions.map(region => ({ region, lines: [] }));
+  const unassigned = [];
+  for (const line of lines) {
+    const [lx, ly, lw, lh] = line.bbox;
+    const cx = lx + lw / 2, cy = ly + lh / 2;
+    const group = groups.find(g => {
+      const [x, y, w, h] = g.region.bbox;
+      return cx >= x && cx <= x + w && cy >= y && cy <= y + h;
+    });
+    if (group && pageXmlRegionTag(normalizeClass(group.region.label)) === 'TextRegion') group.lines.push(line);
+    else unassigned.push(line);
+  }
+  if (unassigned.length || !groups.length) {
+    const synthetic = {
+      id: -1,
+      type: 'layout',
+      bbox: [0, 0, imageWidth(), imageHeight()],
+      label: 'TextRegion',
+      confidence: 1,
+      readingOrder: 9999
+    };
+    groups.push({ region: synthetic, lines: unassigned });
+  }
+  return groups;
+}
+
+function buildPageXml() {
+  const pageId = buildPageId();
+  const now = new Date().toISOString();
+  const groups = groupLinesByRegions();
+  const pageAttrs = `imageFilename="${escapeXml(state.imageName || '')}" imageWidth="${imageWidth()}" imageHeight="${imageHeight()}" readingDirection="${state.pageMeta.reading_direction === 'rtl' ? 'right-to-left' : 'left-to-right'}"`;
+  const parts = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    `<PcGts xmlns="http://schema.primaresearch.org/PAGE/gts/pagecontent/2019-07-15" pcGtsId="${escapeXml(pageId)}">`,
+    '<Metadata>',
+    '<Creator>KCAC Annotation Workbench</Creator>',
+    `<Created>${now}</Created>`,
+    `<LastChange>${now}</LastChange>`,
+    '</Metadata>',
+    `<Page ${pageAttrs}>`
+  ];
+  for (const group of groups) {
+    const cls = normalizeClass(group.region.label);
+    const regionId = group.region.id < 0 ? `${pageId}_r0000` : stableAnnotationId(group.region);
+    const tag = pageXmlRegionTag(cls);
+    parts.push(`<${tag} id="${escapeXml(regionId)}" custom="structure {type:${escapeXml(cls)};} readingOrder {index:${readingOrderValue(group.region) ?? ordinalFor(group.region)};}">`);
+    parts.push(`<Coords points="${pointsString(annPolygon(group.region))}"/>`);
+    for (const line of group.lines) {
+      const lineId = stableAnnotationId(line);
+      parts.push(`<TextLine id="${escapeXml(lineId)}" custom="readingOrder {index:${readingOrderValue(line) ?? ordinalFor(line)};}">`);
+      parts.push(`<Coords points="${pointsString(annPolygon(line))}"/>`);
+      parts.push(`<Baseline points="${pointsString(annBaseline(line))}"/>`);
+      parts.push(`<TextEquiv index="0" dataType="raw"><Unicode>${escapeXml(line.textRaw || '')}</Unicode></TextEquiv>`);
+      parts.push(`<TextEquiv index="1" dataType="normalised"><Unicode>${escapeXml(line.textNormalized || '')}</Unicode></TextEquiv>`);
+      parts.push(`<TextEquiv index="2" dataType="diacritic_stripped"><Unicode>${escapeXml(line.textPlain || '')}</Unicode></TextEquiv>`);
+      parts.push('</TextLine>');
+    }
+    parts.push(`</${tag}>`);
+  }
+  parts.push('</Page>', '</PcGts>');
+  return parts.join('\n');
+}
+
+function buildAltoXml() {
+  const pageId = buildPageId();
+  const parts = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<alto xmlns="http://www.loc.gov/standards/alto/ns-v4#" xmlns:xlink="http://www.w3.org/1999/xlink">',
+    '<Description><MeasurementUnit>pixel</MeasurementUnit></Description>',
+    '<Layout>',
+    `<Page ID="${escapeXml(pageId)}" PHYSICAL_IMG_NR="${escapeXml(state.pageMeta.page_number_sequence)}" WIDTH="${imageWidth()}" HEIGHT="${imageHeight()}">`,
+    `<PrintSpace ID="${escapeXml(pageId)}_print" HPOS="0" VPOS="0" WIDTH="${imageWidth()}" HEIGHT="${imageHeight()}">`
+  ];
+  const emittedLines = new Set();
+  for (const region of annotationsByType('layout')) {
+    const [x, y, w, h] = roundedBbox(region);
+    const cls = normalizeClass(region.label);
+    const tag = cls === 'Illustration' || cls === 'Figure' || cls === 'DecorativeElement' ? 'Illustration' : 'TextBlock';
+    parts.push(`<${tag} ID="${escapeXml(stableAnnotationId(region))}" HPOS="${x}" VPOS="${y}" WIDTH="${w}" HEIGHT="${h}" TAGREFS="${escapeXml(cls)}">`);
+    if (tag === 'TextBlock') {
+      for (const line of annotationsByType('line')) {
+        const [lx, ly, lw, lh] = roundedBbox(line);
+        const cx = lx + lw / 2, cy = ly + lh / 2;
+        if (cx < x || cx > x + w || cy < y || cy > y + h) continue;
+        emittedLines.add(line.id);
+        const baseline = annBaseline(line).flat().map(round2).join(' ');
+        parts.push(`<TextLine ID="${escapeXml(stableAnnotationId(line))}" HPOS="${lx}" VPOS="${ly}" WIDTH="${lw}" HEIGHT="${lh}" BASELINE="${baseline}">`);
+        parts.push(`<String ID="${escapeXml(stableAnnotationId(line))}_s0001" CONTENT="${escapeXml(lineText(line))}" HPOS="${lx}" VPOS="${ly}" WIDTH="${lw}" HEIGHT="${lh}"/>`);
+        parts.push('</TextLine>');
+      }
+    }
+    parts.push(`</${tag}>`);
+  }
+  for (const line of annotationsByType('line').filter(line => !emittedLines.has(line.id))) {
+      const [x, y, w, h] = roundedBbox(line);
+      const baseline = annBaseline(line).flat().map(round2).join(' ');
+      parts.push(`<TextBlock ID="${escapeXml(stableAnnotationId(line))}_block" HPOS="${x}" VPOS="${y}" WIDTH="${w}" HEIGHT="${h}" TAGREFS="TextRegion">`);
+      parts.push(`<TextLine ID="${escapeXml(stableAnnotationId(line))}" HPOS="${x}" VPOS="${y}" WIDTH="${w}" HEIGHT="${h}" BASELINE="${baseline}">`);
+      parts.push(`<String ID="${escapeXml(stableAnnotationId(line))}_s0001" CONTENT="${escapeXml(lineText(line))}" HPOS="${x}" VPOS="${y}" WIDTH="${w}" HEIGHT="${h}"/>`);
+      parts.push('</TextLine></TextBlock>');
+  }
+  parts.push('</PrintSpace>', '</Page>', '</Layout>', '</alto>');
+  return parts.join('\n');
+}
+
+function buildTeiXml() {
+  const pageId = buildPageId();
+  const title = state.bookMeta.title_original || state.imageName || pageId;
+  const parts = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<TEI xmlns="http://www.tei-c.org/ns/1.0">',
+    '<teiHeader><fileDesc>',
+    `<titleStmt><title>${escapeXml(title)}</title><author>${escapeXml(state.bookMeta.authors || '')}</author></titleStmt>`,
+    `<publicationStmt><publisher>KCAC</publisher><availability><licence target="${escapeXml(state.bookMeta.spdx_license || 'NOASSERTION')}">${escapeXml(state.bookMeta.rights_status || 'unknown')}</licence></availability></publicationStmt>`,
+    `<sourceDesc><bibl><idno>${escapeXml(state.pageMeta.book_id)}</idno><pubPlace>${escapeXml(state.bookMeta.place_of_publication || '')}</pubPlace><date>${escapeXml(state.bookMeta.publication_year_printed || state.bookMeta.publication_year_gregorian || '')}</date></bibl></sourceDesc>`,
+    '</fileDesc></teiHeader>',
+    '<facsimile>',
+    `<surface xml:id="${escapeXml(pageId)}" ulx="0" uly="0" lrx="${imageWidth()}" lry="${imageHeight()}">`
+  ];
+  for (const ann of state.annotations) {
+    const [x, y, w, h] = roundedBbox(ann);
+    parts.push(`<zone xml:id="${escapeXml(stableAnnotationId(ann))}" type="${escapeXml(ann.type === 'line' ? 'line' : normalizeClass(ann.label))}" rotate="${annAngle(ann)}" points="${pointsString(annPolygon(ann))}" ulx="${x}" uly="${y}" lrx="${round2(x + w)}" lry="${round2(y + h)}"/>`);
+  }
+  parts.push('</surface>', '</facsimile>', `<text xml:lang="${escapeXml(state.pageMeta.language || 'ckb-Arab')}" dir="${escapeXml(state.pageMeta.reading_direction || 'rtl')}"><body>`);
+  parts.push(`<pb n="${escapeXml(state.pageMeta.page_number_printed || state.pageMeta.page_number_sequence)}" facs="#${escapeXml(pageId)}"/>`);
+  for (const line of annotationsByType('line')) {
+    parts.push(`<l xml:id="${escapeXml(stableAnnotationId(line))}_text" facs="#${escapeXml(stableAnnotationId(line))}">${escapeXml(lineText(line))}</l>`);
+  }
+  parts.push('</body></text>', '</TEI>');
+  return parts.join('\n');
+}
+
+function buildHfJsonl() {
+  return JSON.stringify({
+    id: buildPageId(),
+    book_id: state.pageMeta.book_id,
+    page_id: buildPageId(),
+    image: state.imageName || '',
+    width: imageWidth(),
+    height: imageHeight(),
+    language: state.pageMeta.language,
+    script: state.pageMeta.script,
+    split: state.pageMeta.split,
+    verification_status: state.pageMeta.verification_status,
+    page: { ...state.pageMeta },
+    book: { ...state.bookMeta },
+    regions: annotationsByType('layout').map(buildRegionRecord),
+    lines: annotationsByType('line').map(buildLineRecord)
+  }) + '\n';
+}
+
+function buildMetsXml() {
+  const bookId = state.pageMeta.book_id || 'kcac_000000';
+  const pageId = buildPageId();
+  return [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    `<mets:mets xmlns:mets="http://www.loc.gov/METS/" xmlns:mods="http://www.loc.gov/mods/v3" OBJID="${escapeXml(bookId)}">`,
+    '<mets:dmdSec ID="dmd_book"><mets:mdWrap MDTYPE="MODS"><mets:xmlData>',
+    '<mods:mods>',
+    `<mods:identifier type="local">${escapeXml(bookId)}</mods:identifier>`,
+    `<mods:titleInfo><mods:title>${escapeXml(state.bookMeta.title_original || '')}</mods:title></mods:titleInfo>`,
+    `<mods:name><mods:namePart>${escapeXml(state.bookMeta.authors || '')}</mods:namePart></mods:name>`,
+    `<mods:originInfo><mods:place><mods:placeTerm>${escapeXml(state.bookMeta.place_of_publication || '')}</mods:placeTerm></mods:place><mods:publisher>${escapeXml(state.bookMeta.publisher || '')}</mods:publisher><mods:dateIssued>${escapeXml(state.bookMeta.publication_year_printed || state.bookMeta.publication_year_gregorian || '')}</mods:dateIssued></mods:originInfo>`,
+    `<mods:language><mods:languageTerm type="code" authority="bcp47">${escapeXml(state.pageMeta.language || '')}</mods:languageTerm></mods:language>`,
+    `<mods:accessCondition type="use and reproduction">${escapeXml(state.bookMeta.rights_status || 'unknown')} ${escapeXml(state.bookMeta.spdx_license || 'NOASSERTION')}</mods:accessCondition>`,
+    '</mods:mods>',
+    '</mets:xmlData></mets:mdWrap></mets:dmdSec>',
+    '<mets:fileSec><mets:fileGrp USE="images">',
+    `<mets:file ID="${escapeXml(pageId)}_image" MIMETYPE="image/*"><mets:FLocat LOCTYPE="OTHER" OTHERLOCTYPE="filename" xlink:href="${escapeXml(state.imageName || '')}" xmlns:xlink="http://www.w3.org/1999/xlink"/></mets:file>`,
+    '</mets:fileGrp></mets:fileSec>',
+    `<mets:structMap TYPE="physical"><mets:div TYPE="book" ID="${escapeXml(bookId)}"><mets:div TYPE="page" ID="${escapeXml(pageId)}" ORDER="${escapeXml(state.pageMeta.page_number_sequence)}"><mets:fptr FILEID="${escapeXml(pageId)}_image"/></mets:div></mets:div></mets:structMap>`,
+    '</mets:mets>'
+  ].join('\n');
+}
+
+function buildIiifManifest() {
+  const pageId = buildPageId();
+  const canvasId = `https://kcac.example/iiif/${encodeURIComponent(pageId)}/canvas/p${pad(state.pageMeta.page_number_sequence, 4)}`;
+  return JSON.stringify({
+    '@context': 'http://iiif.io/api/presentation/3/context.json',
+    id: `https://kcac.example/iiif/${encodeURIComponent(pageId)}/manifest`,
+    type: 'Manifest',
+    label: { none: [state.bookMeta.title_original || pageId] },
+    metadata: [
+      { label: { en: ['Book ID'] }, value: { none: [state.pageMeta.book_id] } },
+      { label: { en: ['Language'] }, value: { none: [state.pageMeta.language] } },
+      { label: { en: ['Verification'] }, value: { none: [state.pageMeta.verification_status] } },
+      { label: { en: ['Rights'] }, value: { none: [`${state.bookMeta.rights_status || 'unknown'} / ${state.bookMeta.spdx_license || 'NOASSERTION'}`] } }
+    ],
+    items: [{
+      id: canvasId,
+      type: 'Canvas',
+      height: imageHeight(),
+      width: imageWidth(),
+      label: { none: [pageId] },
+      items: [{
+        id: `${canvasId}/page`,
+        type: 'AnnotationPage',
+        items: [{
+          id: `${canvasId}/painting`,
+          type: 'Annotation',
+          motivation: 'painting',
+          body: { id: state.imageName || '', type: 'Image', format: 'image/*', height: imageHeight(), width: imageWidth() },
+          target: canvasId
+        }]
+      }]
+    }]
+  }, null, 2);
+}
+
+function buildDatasetCard() {
+  const license = state.bookMeta.spdx_license && state.bookMeta.spdx_license !== 'NOASSERTION' ? state.bookMeta.spdx_license.toLowerCase() : 'other';
+  return `---
+license: ${license}
+language:
+- ${state.pageMeta.language || 'ckb-Arab'}
+task_categories:
+- image-to-text
+- object-detection
+- token-classification
+pretty_name: KCAC Kurdish Historical Print Document Understanding
+---
+
+# KCAC Kurdish Historical Print Document Understanding
+
+## Dataset Summary
+Pilot page export for the KCAC historical Kurdish print dataset. It preserves stable hierarchical IDs, page metadata, region polygons, line baselines, and three transcription layers.
+
+## Standards
+PAGE XML, ALTO XML, METS/MODS, TEI P5, IIIF Presentation 3.0, BCP 47, SPDX, and HuggingFace JSONL are generated by the annotation workbench.
+
+## Splits
+Pages must be split by book, never by page. Current page split: ${state.pageMeta.split}.
+
+## Verification
+Current page status: ${state.pageMeta.verification_status}.
+`;
+}
+
+function buildDatasheet() {
+  return `# Datasheet for KCAC Kurdish Historical Print Dataset Page
+
+## Motivation
+This page belongs to the KCAC historical Kurdish print document understanding dataset, designed for OCR, layout analysis, search, and digital humanities reuse.
+
+## Composition
+- Book ID: ${state.pageMeta.book_id}
+- Page ID: ${buildPageId()}
+- Language: ${state.pageMeta.language}
+- Script: ${state.pageMeta.script}
+- Page type: ${state.pageMeta.page_type}
+- Layout class: ${state.pageMeta.layout_class}
+- Regions: ${state.annotations.filter(a => a.type === 'layout').length}
+- Lines: ${state.annotations.filter(a => a.type === 'line').length}
+
+## Collection Process
+Source collection: ${state.bookMeta.source_collection || 'unknown'}
+Source URL: ${state.bookMeta.source_url || 'unknown'}
+Scan quality: ${state.pageMeta.scan_quality}
+Damage: ${state.pageMeta.damage_present || 'none recorded'}
+
+## Preprocessing
+The workbench stores rectangular polygons, line baselines, raw transcription, normalised transcription, and diacritic-stripped transcription. Downstream exports include PAGE XML, ALTO XML, TEI, METS/MODS, IIIF, and HuggingFace JSONL.
+
+## Uses
+Recommended uses include OCR training/evaluation, layout analysis, NER preparation, search, historical linguistics, and Kurdish digital humanities.
+
+## Distribution
+Rights status: ${state.bookMeta.rights_status}
+SPDX licence: ${state.bookMeta.spdx_license}
+Verification status: ${state.pageMeta.verification_status}
+
+## Maintenance
+Dataset releases should be versioned with a changelog and split by book, never by page.
+`;
+}
+
+function exportStandard() {
+  if (!state.image && !state.annotations.length) { toast('Load a page first', 'error'); return; }
+  validatePage(false);
+  const format = document.getElementById('exportFormat').value;
+  const base = buildPageId();
+  const files = {
+    'kcac-json': [JSON.stringify(buildSuryaJson(), null, 2), `${base}.kcac.json`, 'application/json'],
+    page: [buildPageXml(), `${base}.page.xml`, 'application/xml'],
+    alto: [buildAltoXml(), `${base}.alto.xml`, 'application/xml'],
+    tei: [buildTeiXml(), `${base}.tei.xml`, 'application/xml'],
+    hf: [buildHfJsonl(), `${base}.hf.jsonl`, 'application/jsonl'],
+    mets: [buildMetsXml(), `${base}.mets.xml`, 'application/xml'],
+    iiif: [buildIiifManifest(), `${base}.iiif.json`, 'application/json'],
+    'dataset-card': [buildDatasetCard(), 'DATASET_CARD.md', 'text/markdown'],
+    datasheet: [buildDatasheet(), `${base}.datasheet.md`, 'text/markdown']
+  };
+  if (format === 'bundle') {
+    ['kcac-json', 'page', 'alto', 'tei', 'hf', 'mets', 'iiif', 'dataset-card', 'datasheet'].forEach(key => downloadFile(...files[key]));
+    toast('Exported standards bundle', 'success');
+    return;
+  }
+  downloadFile(...files[format]);
+  toast(`Exported ${format}`, 'success');
+}
+
+document.getElementById('exportStdBtn').addEventListener('click', exportStandard);
+
+document.getElementById('bookSetupApplyBtn').addEventListener('click', () => {
+  const bookId = document.getElementById('setupBookId').value.trim() || 'kcac_000000';
+  state.folderDefaults.active = true;
+  state.folderDefaults.bookId = bookId;
+  state.folderDefaults.startPage = Math.max(1, Number(document.getElementById('setupStartPage').value) || 1);
+  state.bookMeta = {
+    ...state.bookMeta,
+    title_original: document.getElementById('setupTitle').value.trim(),
+    title_normalised: state.bookMeta.title_normalised || document.getElementById('setupTitle').value.trim(),
+    authors: document.getElementById('setupAuthors').value.trim(),
+    rights_status: document.getElementById('setupRights').value,
+    spdx_license: document.getElementById('setupSpdx').value,
+    source_collection: document.getElementById('setupSource').value.trim(),
+    source_url: document.getElementById('setupSourceUrl').value.trim()
+  };
+  state.folderDefaults.bookMeta = { ...state.bookMeta };
+  state.pageMeta = { ...state.pageMeta, ...inferPageMetaFromImage(), book_id: bookId };
+  updateMetaUI();
+  markDirty();
+  validatePage(false);
+  document.getElementById('bookSetupModal').classList.remove('show');
+  toast('Book defaults applied to folder', 'success');
+});
+
+document.getElementById('bookSetupLaterBtn').addEventListener('click', () => {
+  document.getElementById('bookSetupModal').classList.remove('show');
+});
+
+const HELP_OVERRIDES = {
+  openImageFolderBtn: ['Open a folder of page scan images.', 'This starts the book workflow. The folder is treated as one book, a catalog template is prepared, and page numbers increase automatically in image order.'],
+  openImageFolderBtn2: ['Open a folder of page scan images.', 'This starts the book workflow. The folder is treated as one book, a catalog template is prepared, and page numbers increase automatically in image order.'],
+  openJsonFolderBtn: ['Open the writable annotation JSON folder.', 'Existing Surya or KCAC JSON files are paired by filename. New corrected KCAC JSON files are saved here when the browser supports folder writes.'],
+  openJsonFolderBtn2: ['Open the writable annotation JSON folder.', 'Existing Surya or KCAC JSON files are paired by filename. New corrected KCAC JSON files are saved here when the browser supports folder writes.'],
+  loadImage: ['Load one image without a folder.', 'Use this for a quick one-page check. Folder-level catalog inheritance and automatic page sequence work best with Image Folder.'],
+  loadJson: ['Load one annotation JSON file.', 'Use this to inspect or correct a single Surya/KCAC JSON file. It can contain old text_lines/layout arrays or the new KCAC schema.'],
+  saveJsonBtn: ['Save the current page as KCAC JSON.', 'The saved file includes stable IDs, page/catalog metadata, rotated polygons, baselines, transcription layers, and legacy Surya-compatible arrays.'],
+  exportFormat: ['Choose the export standard.', 'Select whether Export downloads one standards file or a full bundle with KCAC JSON, PAGE XML, ALTO, TEI, METS/MODS, IIIF, Hugging Face JSONL, Dataset Card, and Datasheet.'],
+  exportStdBtn: ['Export the selected standards format.', 'Use this after correction or validation. The export uses the current page metadata, catalog metadata, rotated annotation polygons, baselines, and transcription text.'],
+  exportYoloBtn: ['Export YOLO detection labels.', 'Downloads normalized box labels for text lines and layout regions. This is useful for computer-vision training, but it cannot fully preserve rotated polygons.'],
+  undoBtn: ['Undo the last annotation edit.', 'Steps backward through recent box, class, text, rotation, or metadata changes stored in the page history.'],
+  redoBtn: ['Redo the undone annotation edit.', 'Restores the next change after Undo, as long as you have not made a new edit after undoing.'],
+  autosaveChk: ['Save automatically when switching pages.', 'When enabled, moving to another page writes the current KCAC JSON first. Keep it on during folder correction work.'],
+  helpBtn: ['Open the full workflow help.', 'Shows folder workflow, export behavior, and keyboard shortcuts for selection, drawing, navigation, and rotation.'],
+  fileSearch: ['Filter the image list.', 'Type part of a filename to narrow the left panel while keeping folder order and page numbering unchanged.'],
+  prevBtn: ['Move to the previous image.', 'If autosave is enabled, the current page is saved before loading the previous page. Shortcut: PageUp.'],
+  nextBtn: ['Move to the next image.', 'If autosave is enabled, the current page is saved before loading the next page. Shortcut: PageDown.'],
+  showLines: ['Show or hide text-line annotations.', 'This only changes visibility on the canvas. It does not delete lines or remove them from exports.'],
+  showLayout: ['Show or hide layout-region annotations.', 'This only changes visibility on the canvas. It does not delete regions or remove them from exports.'],
+  showLabels: ['Show class labels on annotations.', 'Labels display the annotation class, accuracy, and rotation angle so you can inspect corrections without opening the editor fields.'],
+  confThreshold: ['Hide annotations below this accuracy.', 'Move the slider to review only annotations at or above a confidence/accuracy value. Hidden annotations are still saved and exported.'],
+  deleteBtn: ['Delete the selected annotations.', 'Removes selected lines or regions from the current page only. Use Undo if this was accidental.'],
+  selectAllBtn: ['Select all currently visible annotations.', 'Respects line/layout visibility and the confidence threshold, so hidden annotations are not selected.'],
+  deselectBtn: ['Clear the current selection.', 'Leaves all annotations unchanged and closes the single-annotation editing fields.'],
+  deleteLowConfBtn: ['Delete annotations below the threshold.', 'Uses the Min conf slider as the cutoff. This is intended for cleaning poor automatic detections before human correction.'],
+  invertBtn: ['Invert selection among visible annotations.', 'Selected visible items become unselected and unselected visible items become selected. Hidden items are ignored.'],
+  runQcBtn: ['Validate this page against KCAC rules.', 'Checks stable ID format, page sequence, rights/licence metadata, missing line/region layers, duplicate reading order, empty verified transcriptions, and out-of-image boxes.'],
+  applyBookDefaultsBtn: ['Apply Catalog values to the whole folder.', 'Stores the current title, author, source, rights, licence, and book ID as defaults for new pages in this image folder.'],
+  bookSetupApplyBtn: ['Use these book values for the folder.', 'Closes setup and applies the entered book ID, starting page number, title, author, rights, licence, and source metadata as folder defaults.'],
+  bookSetupLaterBtn: ['Skip book setup for now.', 'Closes the setup dialog without changing fields. You can still fill Catalog manually and press Apply Catalog To Folder later.'],
+  infoModalCloseBtn: ['Close this explanation.', 'Returns to the annotation page without changing any data.'],
+  selectedStableId: ['Stable ID for the selected annotation.', 'This is generated from book ID, page sequence, annotation type, and reading order. It is read-only because changing metadata should update it consistently.'],
+  readingOrderInput: ['Reading order for this line or region.', 'Lower numbers are exported first. Use it to preserve RTL page flow, multi-column order, footnotes, and headings.'],
+  annConfidenceInput: ['Manual accuracy for the selected annotation.', 'Automatic detections may start below 1.0. Any manual geometry, class, rotation, or transcription edit resets this to 1.0.'],
+  rotationInput: ['Rotation angle for the selected annotation.', 'Use this for skewed print lines or angled page regions. You can type degrees, drag the round handle, or press [ and ].'],
+  annKindInput: ['Whether the selected item is a line or region.', 'Line annotations export baselines and transcription layers. Region annotations export layout classes and reading order.'],
+  rawTextInput: ['Raw as-printed transcription.', 'Enter exactly what appears on the page, preserving historical spelling, spacing, and printed character choices.'],
+  normTextInput: ['Modern normalised transcription.', 'Enter the modern or standardised form when useful for search, NLP, and normalisation research. Leave blank if not corrected yet.'],
+  plainTextInput: ['Diacritic-stripped transcription.', 'Enter a simplified text layer without diacritics or optional marks. This supports search, OCR evaluation variants, and normalisation experiments.'],
+  setupBookId: ['Book ID to apply to this folder.', 'Example: kcac_000152. Every page ID, line ID, and region ID in this folder will use this prefix.'],
+  setupStartPage: ['First page sequence number in this folder.', 'If the first image should be page 1, keep 1. If the folder starts at page 7, enter 7 and later pages increment automatically.'],
+  setupTitle: ['Book title for folder defaults.', 'This fills the Catalog title for each page unless an existing JSON file already contains a different title.'],
+  setupAuthors: ['Author names for folder defaults.', 'Use the printed author name or the catalog authority form you want repeated across pages in this book folder.'],
+  setupRights: ['Rights status for the book folder.', 'Choose whether the item is public domain, permission granted, copyrighted, or unknown. This is exported into metadata files.'],
+  setupSpdx: ['Licence label for machine-readable exports.', 'Choose a standard SPDX licence when possible, or LicenseRef-KCAC-Permission for custom KCAC permission.'],
+  setupSource: ['KCAC source collection for the book.', 'Examples: Derbendixan Public Library, Bedirxan Library, Barzani Headquarters, or another KCAC sub-collection.'],
+  setupSourceUrl: ['Permanent source URL for the book.', 'Use a KCAC or archive URL if available. It helps exported METS/MODS, Dataset Card, and Datasheet point back to the source.']
+};
+
+const FIELD_HELP = {
+  book_id: ['Stable book ID.', 'Required hierarchical prefix for all page, region, line, word, and character IDs. Use the kcac_000152 pattern.'],
+  page_number_sequence: ['Automatic sequence number for this page.', 'In folder mode this increases by image order from the chosen start page. It should not be a printed page label if pages are missing or unnumbered.'],
+  page_number_printed: ['Page number exactly as printed.', 'Use the visible printed number, including non-Arabic numerals or blank when the page has no printed number.'],
+  split: ['Dataset split assignment.', 'Use train/val/test by book, never random page mixing. Special test sets expose historical, low-quality, poetry, multi-column, mixed-language, or rare-glyph cases.'],
+  page_type: ['Physical page category.', 'Choose cover, title, table of contents, body, blank, advert, colophon, index, or related type for filtering and standards export.'],
+  layout_class: ['Overall page layout style.', 'Choose single-column, two-column, dictionary, poetry-centred, or other layout so benchmark slices can test real layout variation.'],
+  language: ['BCP 47 language/script tag.', 'Use ckb-Arab for Sorani Arabic script, kmr-Latn for Kurmanji Latin, hac-Arab for Hawrami, or mixed for multi-language pages.'],
+  reading_direction: ['Main reading direction.', 'Use rtl for Sorani/Hawrami Arabic-script pages and ltr for Latin-script Kurmanji pages. This is exported to PAGE/TEI metadata.'],
+  script: ['Script or language-script family.', 'Describes the page writing system for filtering, OCR training, and mixed-script evaluation.'],
+  era_typography: ['Historical print technology.', 'Typewriter, letterpress, offset, or digital typography helps build coverage across real KCAC print variation.'],
+  scan_quality: ['Visual quality of this scan.', 'Use pristine/good/fair/poor to mark pages that may be harder for OCR because of blur, fading, damage, or capture issues.'],
+  scan_resolution_dpi: ['Estimated scan resolution.', 'Record DPI when known. It helps distinguish preservation scans from lower-quality derivatives.'],
+  colour_mode: ['Colour mode of the page image.', 'Colour, greyscale, or bitonal affects preprocessing, OCR behavior, and archival derivative descriptions.'],
+  damage_present: ['Visible damage notes.', 'Write short tags such as foxing, water, tearing, ink-bleed, fading, or blur so hard cases can be filtered later.'],
+  verification_status: ['Human review status.', 'raw and ocr_generated are internal or weak labels. single_verified, double_verified, adjudicated, and gold are public-quality levels.'],
+  has_illustrations: ['Page contains an illustration.', 'Enable this when the page has pictures, drawings, plates, or visual material that should be searchable and benchmarked.'],
+  has_table: ['Page contains a table.', 'Enable this for table layouts so they can be filtered and evaluated separately from prose or poetry pages.'],
+  has_marginalia: ['Page contains margin notes.', 'Enable this when there is printed or handwritten content outside the main text flow.'],
+  has_footnote: ['Page contains footnotes.', 'Enable this when a footnote region appears; it affects reading order and layout class evaluation.'],
+  has_poetry: ['Page contains poetry.', 'Enable this for centred verse, verse blocks, dense diacritics, or poetic layout cases.'],
+  title_original: ['Title as printed in the source.', 'Copy the title exactly from the book or KCAC catalog, preserving original orthography when possible.'],
+  title_normalised: ['Modern normalised title.', 'Use a searchable standard title spelling when the printed title uses older or inconsistent forms.'],
+  authors: ['Author names as printed or catalogued.', 'This is the main author field inherited by all pages in one book folder.'],
+  publisher: ['Publisher or printing house.', 'Record the publisher, printer, or institution as printed in the book or catalog metadata.'],
+  place_of_publication: ['Publication city or place.', 'Use the printed place or catalog authority form; it supports historical geography and network analysis.'],
+  publication_year_printed: ['Year exactly as printed.', 'May be Gregorian, Hijri, Kurdish, or text. Preserve the source form here.'],
+  publication_year_gregorian: ['Aligned Gregorian year.', 'Use a numeric Gregorian year when known so the dataset can be sorted and split by era.'],
+  genre: ['Book or page genre.', 'Use prose, poetry, periodical, dictionary, religious text, political text, or another controlled/free tag.'],
+  rights_status: ['Rights status for release decisions.', 'This controls whether the item is public domain, permission granted, copyrighted, or unknown.'],
+  spdx_license: ['Machine-readable licence.', 'SPDX values make releases easier to validate on Hugging Face, Zenodo, and metadata pipelines.'],
+  source_collection: ['KCAC sub-collection.', 'Record the holding source or donor collection to support provenance and diversity reporting.'],
+  source_url: ['Permanent source link.', 'Use a stable KCAC/archive URL when available so exported metadata can cite the original item.']
+};
+
+const CLASS_HELP = {
+  TextLine: ['Mark selection as an OCR text line.', 'Line items store baseline, rotated polygon, reading order, and three transcription layers for OCR training and evaluation.'],
+  TextRegion: ['Mark selection as a main text region.', 'Use for blocks of prose, poetry text blocks, or normal paragraph regions that contain text lines.'],
+  HeadingH1: ['Mark selection as a top-level heading.', 'Use for book titles, major section titles, or page headings with the highest heading level.'],
+  HeadingH2: ['Mark selection as a second-level heading.', 'Use for section or subsection headers below H1.'],
+  HeadingH3: ['Mark selection as a third-level heading.', 'Use for smaller nested headings or minor labels.'],
+  Caption: ['Mark selection as a caption.', 'Use for text describing an illustration, figure, table, or plate.'],
+  Footnote: ['Mark selection as a footnote.', 'Use for bottom-page notes or explanatory text outside the main reading flow.'],
+  PageNumber: ['Mark selection as the page number.', 'Use for printed folio/page numbers so they are not confused with body text.'],
+  Header: ['Mark selection as a page header.', 'Use for repeated running heads at the top of pages.'],
+  Footer: ['Mark selection as a page footer.', 'Use for repeated bottom text, footer lines, or footer metadata.'],
+  Marginalia: ['Mark selection as marginalia.', 'Use for notes or text placed in the margin beside the main text.'],
+  Illustration: ['Mark selection as an illustration.', 'Use for drawings, photographs, decorative plates, and visual page content.'],
+  Figure: ['Mark selection as a figure.', 'Use for charts, diagrams, maps, or structured visual figures.'],
+  Table: ['Mark selection as a table.', 'Use for rows/columns or dictionary-like tabular structures.'],
+  DecorativeElement: ['Mark selection as decoration.', 'Use for ornaments, separators, borders, and page furniture without normal text.'],
+  Advertisement: ['Mark selection as an advertisement.', 'Use for ad blocks in periodicals or book back matter.'],
+  Signature: ['Mark selection as a signature.', 'Use for signatures, ownership marks, or signed stamps printed on the page.'],
+  Stamp: ['Mark selection as a stamp.', 'Use for library/archive stamps or printed seals.'],
+  MathRegion: ['Mark selection as mathematical content.', 'Use for equations, formulas, or scientific notation regions.']
+};
+
+const TOOL_HELP = {
+  select: ['Select, move, resize, and rotate annotations.', 'Click an annotation to select it. Drag the box to move, square handles to resize, and the round handle to rotate.'],
+  'draw-line': ['Draw a new OCR text line.', 'Drag around a printed line. The new line starts at 100% manual accuracy and can receive raw, normalised, and diacritic-stripped transcription.'],
+  'draw-layout': ['Draw a new layout region.', 'Drag around a visual region such as text block, heading, table, illustration, stamp, or page number.']
+};
+
+let helpTimer = null, helpHideTimer = null, helpTarget = null;
+
+function labelTextFor(el) {
+  const label = el.closest?.('label');
+  if (!label) return '';
+  return Array.from(label.childNodes).filter(n => n.nodeType === 3).map(n => n.textContent.trim()).join(' ').trim();
+}
+
+function cleanText(text) {
+  return String(text || '').replace(/\s+/g, ' ').trim();
+}
+
+function helpPack(title, pair) {
+  if (!pair) return null;
+  return { title: cleanText(title || 'Control'), short: pair[0], more: pair[1] || pair[0] };
+}
+
+function helpContentFor(el) {
+  if (!el) return null;
+  const fieldEl = el.querySelector?.('input,select,textarea') || null;
+  const id = el.id || el.getAttribute?.('for') || el.htmlFor || fieldEl?.id || '';
+  const label = labelTextFor(el);
+  const title = cleanText(label || el.getAttribute?.('aria-label') || el.textContent || el.placeholder || id || el.tagName);
+  if (HELP_OVERRIDES[id]) return helpPack(title, HELP_OVERRIDES[id]);
+  const forEl = id && document.getElementById(id);
+  if (forEl && HELP_OVERRIDES[forEl.id]) return helpPack(title, HELP_OVERRIDES[forEl.id]);
+  const key = el.dataset?.key || forEl?.dataset?.key || fieldEl?.dataset?.key;
+  if (key && FIELD_HELP[key]) return helpPack(title, FIELD_HELP[key]);
+  const cls = el.dataset?.class;
+  if (cls && CLASS_HELP[cls]) return helpPack(cleanText(el.textContent || cls), CLASS_HELP[cls]);
+  const tool = el.dataset?.tool;
+  if (tool && TOOL_HELP[tool]) return helpPack(cleanText(el.textContent || tool), TOOL_HELP[tool]);
+  if (el.classList?.contains('file-item')) return helpPack('File row', ['Open this image page.', 'Loads the selected image and its paired JSON if available. If autosave is enabled, the current page is saved before switching.']);
+  if (el.id === 'stableIdPreview') return helpPack('Page ID Preview', ['Generated stable page ID.', 'Combines the current book ID with the page sequence number. Region and line IDs are derived from this value.']);
+  if (el.id === 'qcList') return helpPack('Validation Issues', ['Current page validation messages.', 'Warnings and errors explain what metadata or annotations should be fixed before release-quality export.']);
+  const titleHelp = cleanText(el.dataset?.help || el.getAttribute?.('title') || el.placeholder);
+  const short = titleHelp || (el.matches?.('button') ? `Use ${title}.` : el.matches?.('select') ? `Choose the ${title} value.` : el.matches?.('textarea') ? `Write the ${title} text layer.` : el.matches?.('input') ? `Enter ${title}.` : title);
+  const more = cleanText(el.dataset?.helpMore) || `${short} This control affects the current page workflow or metadata.`;
+  return short ? { short, more, title } : null;
+}
+
+function helpTargetFor(node) {
+  return node?.closest?.('button,input,select,textarea,label,summary,.file-item,.status-pill,.tool-btn,.class-btn');
+}
+
+function showSmartHelp(el) {
+  const content = helpContentFor(el);
+  if (!content) return;
+  helpTarget = el;
+  const box = document.getElementById('smartHelp');
+  const rect = el.getBoundingClientRect();
+  document.getElementById('smartHelpText').textContent = content.short;
+  document.getElementById('smartHelpMoreBtn').onclick = () => showInfoModal(content.title, content.more);
+  box.classList.add('show');
+  const left = Math.min(window.innerWidth - 340, Math.max(12, rect.left));
+  const top = Math.min(window.innerHeight - 130, rect.bottom + 8);
+  box.style.left = `${left}px`;
+  box.style.top = `${Math.max(12, top)}px`;
+}
+
+function hideSmartHelp() {
+  document.getElementById('smartHelp').classList.remove('show');
+  helpTarget = null;
+}
+
+function showInfoModal(title, text) {
+  hideSmartHelp();
+  document.getElementById('infoModalTitle').textContent = title || 'More Info';
+  document.getElementById('infoModalText').textContent = text || '';
+  document.getElementById('infoModal').classList.add('show');
+}
+
+document.querySelectorAll('[title]').forEach(el => {
+  el.dataset.help = el.getAttribute('title');
+  el.removeAttribute('title');
+});
+
+document.addEventListener('mouseover', e => {
+  const target = helpTargetFor(e.target);
+  if (!target || target.closest('#smartHelp')) return;
+  clearTimeout(helpTimer);
+  clearTimeout(helpHideTimer);
+  helpTimer = setTimeout(() => showSmartHelp(target), 2000);
+});
+
+document.addEventListener('mouseout', e => {
+  const target = helpTargetFor(e.target);
+  if (!target) return;
+  clearTimeout(helpTimer);
+  helpHideTimer = setTimeout(() => {
+    if (!document.getElementById('smartHelp').matches(':hover')) hideSmartHelp();
+  }, 220);
+});
+
+document.getElementById('smartHelp').addEventListener('mouseenter', () => clearTimeout(helpHideTimer));
+document.getElementById('smartHelp').addEventListener('mouseleave', hideSmartHelp);
+document.getElementById('infoModalCloseBtn').addEventListener('click', () => document.getElementById('infoModal').classList.remove('show'));
+document.getElementById('infoModal').addEventListener('click', e => { if (e.target.id === 'infoModal') e.target.classList.remove('show'); });
+
+function toast(msg, type = '') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast show ' + type;
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+document.getElementById('helpBtn').addEventListener('click', () => document.getElementById('helpModal').classList.add('show'));
+document.getElementById('helpModal').addEventListener('click', e => { if (e.target.id === 'helpModal') e.target.classList.remove('show'); });
+
+window.addEventListener('beforeunload', e => {
+  if (state.dirty) { e.preventDefault(); e.returnValue = ''; }
+});
+
+resizeCanvas();
+updateMetaUI();
+renderValidationIssues();
+draw();
+</script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+# Optional Hugging Face Transformers backend for Qwen.
+#
+# The default RTX 3090 path uses Ollama, so these are only needed when
+# engines.qwen2vl.backend is set to "transformers".
+accelerate==1.5.2
+torch==2.6.0
+transformers==4.49.0
