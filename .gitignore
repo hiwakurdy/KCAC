@@ -1,14 +1,52 @@
-.venv/
+# Python bytecode and caches
 __pycache__/
+*.py[codz]
+*$py.class
 .pytest_cache/
 .ruff_cache/
 .mypy_cache/
-*.pyc
+.dmypy.json
+dmypy.json
+.hypothesis/
+.cache/
+
+# Environments and local config
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.env
+.envrc
+config.yaml
+
+# Packaging and build artifacts
+build/
+dist/
+*.egg-info/
+.eggs/
+wheels/
+*.egg
+MANIFEST
+pip-log.txt
+pip-delete-this-directory.txt
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+*.py.cover
+.tox/
+.nox/
+
+# Project generated data and local outputs
 output/
 input/
-config.yaml
 models/**/*
 !models/README.md
+
+# Imported project generated artifacts
 projects/**/.venv/
 projects/**/venv/
 projects/**/env/
@@ -24,6 +62,8 @@ projects/**/images/
 projects/**/annotations/
 projects/**/train/
 projects/**/Testing/
+
+# Heavy local binaries and generated model artifacts
 *.pdf
 *.docx
 *.pdopt
@@ -33,7 +73,18 @@ projects/**/Testing/
 *.mlmodel
 *.log
 *.tmp
-.env
-*.egg-info/
-dist/
-build/
+
+# Common local tooling
+.ipynb_checkpoints/
+.python-version
+.pdm-python
+.pdm-build/
+.pixi/
+__pypackages__/
+.pyre/
+.pytype/
+cython_debug/
+.abstra/
+tempCodeRunnerFile.py
+.pypirc
+.streamlit/secrets.toml
