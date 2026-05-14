@@ -1,3 +1,11 @@
+# ============================================================
+# FULL FIVE-ENGINE CONFIG
+# Use when: Kraken checkpoint is at models/kraken/,
+# Calamari checkpoint is at models/calamari/, Ollama is running
+# with the Qwen model, and ANTHROPIC_API_KEY is set.
+# See docs/how_to_run_and_use.md §2 for env setup details.
+# ============================================================
+
 input:
   books_jsonl: input/books.jsonl
   images_root: ds_test/409/images

@@ -1,3 +1,10 @@
+# ============================================================
+# MINIMAL SMOKE CONFIG  (copy this to config.yaml to start)
+# Use when: you want to run the pipeline with Tesseract only,
+# no GPU, no API keys, no local model checkpoints required.
+# Switch to config.ollama.example once Ollama is set up.
+# ============================================================
+
 input:
   books_jsonl: input/books.jsonl
   images_root: ds_test/409/images
