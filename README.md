@@ -57,3 +57,19 @@ python -m pipeline --config config.yaml hf-export
 Kraken is the optional in-process legacy OCR dependency in `requirements-ocr-py310.txt` because it is not installable in Python 3.13. Calamari is split into `requirements-calamari-py310.txt` and should be installed in a separate environment because its `python-bidi` dependency conflicts with Kraken.
 
 Use `config.full.example` only after you place real checkpoints under `models/kraken/` and `models/calamari/` or edit those paths. `doctor` is expected to fail for any enabled engine whose binary, checkpoint, Ollama server/model, or API key is missing.
+
+
+## KCAC Web Page
+
+🚀 **Open KCAC interactive page:**  
+[Click here to open home1.html](https://hiwakurdy.github.io/KCAC/home1.html)
+
+Source file: [`docs/home1.html`](docs/home1.html)
+
+
+
+
+
+
+
+
