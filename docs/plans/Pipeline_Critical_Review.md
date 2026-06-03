@@ -3,7 +3,7 @@
 > **Reviewer**: External AI/ML research critique
 > **Subject**: KCAC OCR Pipeline (5-engine consensus, PAGE XML, Sorani normalisation)
 > **Reviewer's posture**: Honest, prioritised, actionable. No padding, no flattery.
-> **Response plan**: See `plans/Pipeline_Critical_Review_Response.md` for answers, decisions, schedule, and implementation ownership.
+> **Response plan**: See `docs/plans/Pipeline_Critical_Review_Response.md` for answers, decisions, schedule, and implementation ownership.
 
 ---
 

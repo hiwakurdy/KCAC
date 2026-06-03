@@ -6,10 +6,38 @@ from pathlib import Path
 from .config import load_config
 from .doctor import format_doctor, run_doctor
 
+_CONFIG_SEARCH_ORDER = ["config.yaml", "config.yaml.example"]
+
+
+def _default_config() -> str:
+    for name in _CONFIG_SEARCH_ORDER:
+        if Path(name).exists():
+            return name
+    return _CONFIG_SEARCH_ORDER[-1]
+
 
 def _parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="python -m pipeline", description="KCAC OCR Pipeline v0.1")
-    parser.add_argument("--config", default="config.yaml.example", help="Path to pipeline YAML config")
+    parser = argparse.ArgumentParser(
+        prog="python -m pipeline",
+        description=(
+            "KCAC OCR Pipeline v0.1\n\n"
+            "Typical first run:\n"
+            "  cp config.yaml.example config.yaml   # then edit paths\n"
+            "  python -m pipeline doctor\n"
+            "  python -m pipeline bootstrap --limit 1\n\n"
+            "Stage order: bootstrap → consensus → pagexml → escriptorium → queue → reports\n"
+            "Run all stages: python -m pipeline run-all"
+        ),
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    parser.add_argument(
+        "--config",
+        default=None,
+        help=(
+            "Path to pipeline YAML config "
+            f"(auto-detects {' → '.join(_CONFIG_SEARCH_ORDER)} if omitted)"
+        ),
+    )
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("doctor")
 
@@ -35,7 +63,8 @@ def _parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     args = _parser().parse_args(argv)
-    config = load_config(Path(args.config))
+    config_path = args.config if args.config is not None else _default_config()
+    config = load_config(Path(config_path))
     if args.command == "doctor":
         results = run_doctor(config)
         print(format_doctor(results))

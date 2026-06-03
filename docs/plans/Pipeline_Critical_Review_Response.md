@@ -1,6 +1,6 @@
 # Response Plan: KCAC OCR Pipeline Critical Review
 
-> Source review: `plans/Pipeline_Critical_Review.md`  
+> Source review: `docs/plans/Pipeline_Critical_Review.md`  
 > Purpose: Answer every question raised in the review and define what will be done, when, how, and where in the repository.  
 > Schedule assumption: Day 1 starts on 2026-05-12.
 

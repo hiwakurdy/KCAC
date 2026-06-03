@@ -1,7 +1,3 @@
-activate surya:
-(& conda shell.powershell hook) | Out-String | Invoke-Expression
-
-
 # How To Run And Use The KCAC OCR Pipeline
 
 This guide explains the whole process in practical order: setup, configuration, running each stage, reading outputs, and understanding why each file exists.
@@ -16,7 +12,7 @@ The important design idea is simple: no single OCR engine is trusted alone. The 
 
 ## 2. First-Time Setup
 
-Run these commands from `e:\PHD\Dataset\code`.
+Run these commands from the repository root.
 
 ```powershell
 python -m venv .venv
@@ -230,8 +226,8 @@ The default output root is `output/`.
 
 ### Project Files
 
-- `plans/v1.md`: Original product specification. I used it as the contract for components, outputs, and quality requirements.
-- `home.html`: Existing KCAC annotation workbench. I did not rewrite it because the plan said it should remain the editor; the Python pipeline writes compatible data beside it.
+- `docs/plans/v1.md`: Original product specification. Used as the contract for components, outputs, and quality requirements.
+- `workbench/home.html`: KCAC annotation workbench. Open it in a browser, then use its file-open buttons to load page images and JSON from `output/` or `ds_test/`.
 - `config.yaml.example`: Safe starting configuration. I used YAML because the plan requires one central config and it is easy to edit without touching code.
 - `requirements.txt`: Pinned Python dependencies. This supports reproducibility and Docker builds.
 - `Dockerfile`: Reproducible runtime container. It installs Python and system OCR basics such as Tesseract.
